@@ -1,0 +1,1 @@
+<https://www.codeproject.com/Articles/70302/Redirecting-functions-in-shared-ELF-libraries#_Toc257815978>
