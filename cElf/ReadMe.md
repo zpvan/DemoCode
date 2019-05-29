@@ -5,3 +5,7 @@ ELF分析
 
 
 <https://www.linuxjournal.com/article/1060>
+
+
+
+https://www.codeproject.com/Articles/30824/PLT-redirection-through-shared-object-injection-in#introduction
