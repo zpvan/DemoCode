@@ -23,7 +23,7 @@ $(BIN_TEST):
 
 #-------------------------------------------------------------
 
-BIN_HELLO_WORLD = helloworld
+BIN_HELLO_WORLD = helloworld.out
 
 $(BIN_HELLO_WORLD):
 	gcc -m32 -o $(BIN_HELLO_WORLD) helloworld.c
@@ -35,8 +35,14 @@ LIB_ENGLISH = libenglish.so
 $(LIB_ENGLISH):
 	gcc -m32 -fPIC -shared -o $(LIB_ENGLISH) english.c
 
+#--------------------------------------------------------------
 
-all: $(LIB_TEST1) $(LIB_TEST2) $(BIN_TEST) $(BIN_HELLO_WORLD) $(LIB_ENGLISH)
+BIN_CHECK_ELF = checkElf.out
+
+$(BIN_CHECK_ELF):
+	gcc -m32 -o $(BIN_CHECK_ELF) checkElf.c
+
+all: $(LIB_TEST1) $(LIB_TEST2) $(BIN_TEST) $(BIN_HELLO_WORLD) $(LIB_ENGLISH) $(BIN_CHECK_ELF)
 
 clean:
-	rm -rf $(LIB_TEST1) $(LIB_TEST2) $(BIN_TEST) $(BIN_HELLO_WORLD) $(LIB_ENGLISH)
+	rm -rf $(LIB_TEST1) $(LIB_TEST2) $(BIN_TEST) $(BIN_HELLO_WORLD) $(LIB_ENGLISH) $(BIN_CHECK_ELF)
