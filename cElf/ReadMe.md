@@ -9,3 +9,24 @@ ELF分析
 
 
 https://www.codeproject.com/Articles/30824/PLT-redirection-through-shared-object-injection-in#introduction
+
+
+
+gcc
+
+<https://gcc.gnu.org/>
+
+
+
+gdb
+
+<http://www.gnu.org/software/gdb/>
+
+
+
+linux-elf-general & specific
+
+https://refspecs.linuxfoundation.org
+
+
+
