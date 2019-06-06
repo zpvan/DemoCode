@@ -46,11 +46,28 @@ static char *stypes[] = {
     "SHT_DYNSYM"
 };
 
+static char *btypes[] = {
+    "STB_LOCAL",
+    "STB_GLOBAL",
+    "STB_WEAK"
+};
+
+static char *symtypes[] = {
+    "STT_NOTYPE",
+    "STT_OBJECT",
+    "STT_FUNC",
+    "STT_SECTION",
+    "STT_FILE"
+};
+
 int elf_is_valid(Elf32_Ehdr *elf_hdr);
 int print_elf_header(Elf32_Ehdr *elf_hdr);
 char *get_elf_type(Elf32_Ehdr *elf_hdr);
 int print_program_header(Elf32_Phdr *phdr, uint index);
 int print_section_header(Elf32_Shdr *shdr, uint index, char *strtable);
+int print_sym_table(u_char *filebase, Elf32_Shdr *section, char *strtable);
+void print_bind_type(u_char info);
+void print_sym_type(u_char info);
 
 int main(const int argc, const char **argv) {
     int fd_elf = -1;
@@ -119,6 +136,14 @@ int main(const int argc, const char **argv) {
 
         for (i = 0; i < p_ehdr->e_shnum; i++) {
             print_section_header(&p_shdr[i], i, p_strtable);
+            if (p_shdr[i].sh_type == SHT_SYMTAB || p_shdr[i].sh_type == SHT_DYNSYM) {
+                printf("This section holds a symbol table...\n");
+
+                // being a symbol table, the field sh_link of the section header
+                // will hold an index into the section table which gives the
+                // section containing the string table
+                print_sym_table(p_base, &p_shdr[i], (char *)(p_base + p_shdr[p_shdr[i].sh_link].sh_offset));
+            }
         }
 
     } else {
@@ -233,4 +258,60 @@ int print_section_header(Elf32_Shdr *shdr, uint index, char *strtable) {
     printf("- Address alignment: %08x\n", shdr->sh_addralign);
     printf("- Entry size: %08x\n", shdr->sh_entsize);
     return 1;
+}
+
+int print_sym_table(u_char *filebase, Elf32_Shdr *section, char *strtable) {
+    Elf32_Sym *symbols;
+    size_t sym_size = section->sh_entsize;
+    size_t cur_size = 0;
+
+    if (section->sh_type == SHT_SYMTAB) {
+        printf("Symbol table\n");
+    } else {
+        printf("Dynamic symbol table\n");
+    }
+
+    if (sym_size != sizeof(Elf32_Sym)) {
+        printf("There's something evil with symbol table...\n");
+        return 0;
+    }
+
+    symbols = (Elf32_Sym *)(filebase + section->sh_offset);
+    symbols++;
+    cur_size = sym_size;
+
+    do {
+        printf("- Name index: %d\n", symbols->st_name);
+        printf("- Name: %s\n", strtable + symbols->st_name);
+        printf("- Value: 0x%08x\n", symbols->st_value);
+        printf("- Size: 0x%08x\n", symbols->st_size);
+
+        print_bind_type(symbols->st_info);
+        print_sym_type(symbols->st_info);
+
+        printf("- Section index: %d\n", symbols->st_shndx);
+        cur_size += sym_size;
+        symbols++;
+    } while (cur_size < section->sh_size);
+
+    return 1;
+}
+
+void print_bind_type(u_char info) {
+    u_char bind = ELF32_ST_BIND(info);
+    if (bind <= 2) {
+        printf("- Bind type: %s\n", btypes[bind]);
+    } else {
+        printf("- Bind type: %d\n", bind);
+    }
+}
+
+void print_sym_type(u_char info) {
+    u_char type = ELF32_ST_TYPE(info);
+
+    if (type <= 4) {
+        printf("- Symbol type: %s\n", symtypes[type]);
+    } else {
+        printf("- Symbol type: %d\n", type);
+    }
 }
