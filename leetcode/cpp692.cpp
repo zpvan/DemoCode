@@ -24,18 +24,18 @@ public:
         vector<pair<string, int>> wordsSort;
         sortMap(wordsMap, wordsSort);
         
-        vector<string> topWords;
+        vector<string> topkWords;
         int i = 0;
         for (vector<pair<string, int>>::iterator it = wordsSort.begin();
              it != wordsSort.end(); it++) {
             if (i >= k) {
                 break;
             }
-            topWords.push_back(it->first);
+            topkWords.push_back(it->first);
             i++;
         }
         
-        return topWords;
+        return topkWords;
     }
     
 private:
