@@ -9,18 +9,10 @@
 class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
-        ListNode *head_org = head;
-        while (head) {
-            ListNode *head_next = head->next;
-            if (head_next) {
-                int temp = head->val;
-                head->val = head_next->val;
-                head_next->val = temp;
-                head = head_next->next;
-            } else {
-                break;
-            }
-        }
-        return head_org;
+        if (!head || !head->next) return head;
+        ListNode *next = head->next;
+        head->next = swapPairs(next->next);
+        next->next = head;
+        return next;
     }
 };
