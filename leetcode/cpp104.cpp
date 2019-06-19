@@ -10,21 +10,10 @@
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        Dfs(1, root);
-        return mMax;
+        return Dfs(0, root);
     }
-    
 private:
-    void Dfs(int level, TreeNode *node) {
-        if (!node) {
-            if (mMax < (level -1)) {
-                mMax = level - 1;
-            }
-            return;
-        }
-        
-        Dfs(level + 1, node->left);
-        Dfs(level + 1, node->right);
+    int Dfs(int level, TreeNode *node) {
+        return node ? max(Dfs(level + 1, node->left), Dfs(level + 1, node->right)) : level;
     }
-    int mMax = 0;
 };
