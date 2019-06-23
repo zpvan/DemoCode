@@ -21,8 +21,8 @@ private:
         if (!str.empty()) str += "->";
         str += to_string(root->val);
         if (!root->left && !root->right) vec.push_back(str);
-        string l = str;
-        _dfs(root->left, l, vec);
+        string clone = str;
+        _dfs(root->left, clone, vec);
         _dfs(root->right, str, vec);
     }
 };
