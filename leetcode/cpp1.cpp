@@ -1,11 +1,11 @@
 class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
-        map<int, int> m;
-        for (auto it = nums.begin(); it != nums.end(); it++) {
-            auto it2 = m.find(target - *it);
-            if (it2 != m.end()) return {it2->second, it - nums.begin()};
-            m.insert(pair<int, int>(*it, it - nums.begin()));
+        unordered_map<int, int> m;
+        for (int i = 0; i < nums.size(); i++) {
+            auto it = m.find(target - nums[i]);
+            if (it != m.end()) return {it->second, i};
+            m.insert(pair<int, int>(nums[i], i));
         }
         return {};
     }
