@@ -13,12 +13,8 @@ public:
         vector<int> v;
         _inorder(root, v);
         if (v.size() <= 1) return true;
-        int last = v[0];
         for (int i = 1; i < v.size(); i++) {
-            if (v[i] <= last) {
-                return false;
-            }
-            last = v[i];
+            if (v[i] <= v[i - 1]) return false;
         }
         return true;
     }
@@ -29,5 +25,4 @@ private:
         v.push_back(r->val);
         _inorder(r->right, v);
     }
-    
 };
