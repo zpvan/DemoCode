@@ -1,20 +1,15 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        set<char> S;
-        deque<char> D;
-        int max = 0;
-        for (char c : s) {
-            while (S.end() != S.find(c)) {
-                if (S.size() > max) max = S.size();
-                auto it = S.find(D.front());
-                S.erase(it);
-                D.pop_front();
+        map<char, int> m;
+        int longest = 0, b = 0, i = 0;
+        for (; i < s.size(); i++) {
+            if (m.find(s[i]) != m.end()) {
+                longest = max(longest, i - b);
+                b = max(b, m[s[i]] + 1);
             }
-            S.insert(c);
-            D.push_back(c);
+            m[s[i]] = i;
         }
-        if (S.size() > max) max = S.size();
-        return max;
+        return longest = max(longest, i - b);
     }
 };
