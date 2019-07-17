@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define NOT_OK_EXIT(code, msg); {if(code == -1){perror(msg); exit(-1);} }
+#define NOT_OK_EXIT(code, msg); {if(code == -1){perror(msg); exit(-1);}}
 
 static char child_stack[1024 * 1024]; // 设置子进程的栈空间为1M
 
