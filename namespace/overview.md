@@ -1,4 +1,4 @@
-官方文档
+## 官方文档
 
 https://lwn.net/Articles/531114/
 
@@ -12,7 +12,7 @@ https://lwn.net/Articles/531114/
 
 
 
-clone调用的基础框架
+## clone
 
 clone_demo.c
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
 
 
-UTS Namespace
+## UTS Namespace
 
 uts_demo.c
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
 
 
-IPC Namespace
+## IPC Namespace
 
 ipc_demo.c
 
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
 
 
 
-PID namespace
+## PID namespace
 
 pid_demo.c
 
@@ -234,4 +234,66 @@ int main(int argc, char *argv[])
 
 
 
-Mount Namespace
+## Mount Namespace
+
+mnt_demo.c
+
+```c
+#define _GNU_SOURCE
+#include <sched.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+#include <string.h>
+
+// 定义一个给clone用的栈, 栈大小为1M
+#define STACK_SIZE (1024*1024)
+static char container_stack[STACK_SIZE];
+
+char* const container_args[] = {
+    "/bin/bash",
+    NULL
+};
+
+int container_main()
+{
+    printf("Container - inside the container!\n");
+    printf("Container - pid = %ld\n", (long)getpid());
+    sethostname("container", 10); // 设置hostname
+    system("mount -t proc proc /proc");
+    // 直接执行一个shell, 以便我们观察这个进程空间里的资源是否被隔离
+    execv(container_args[0], container_args);
+    printf("Shouldn't be here!\n");
+    return 1;
+}
+
+int main(int argc, char *argv[])
+{
+    printf("Parent - start a container!\n");
+    // 调用clone函数, 其中传入一个函数, 还有一个栈空间的地址(为什么传尾指针, 因为栈是反着的)
+    int container_pid = clone(container_main, container_stack+STACK_SIZE, 
+        CLONE_NEWUTS | CLONE_NEWIPC | CLONE_NEWPID | CLONE_NEWNS | SIGCHLD, NULL);
+    // 等待子进程结束
+    waitpid(container_pid, NULL, 0);
+    printf("Parent - stop a container!\n");
+    return 0;
+}
+```
+
+
+
+<img src="./res/mnt_demo1.png">
+
+
+
+通过CLONE_NEWNS创建新的mount namespace后, 父进程会把自己的文件结构复制给子进程中. 而子进程中新的namespace中得所有mount操作都只影响自身的文件结构, 而不对外界产生任何影响
+
+
+
+## User Namespace
+
+
+
