@@ -293,6 +293,10 @@ int main(int argc, char *argv[])
 
 
 
+__Parallels ubuntu 18.04 似乎/proc就坏掉了. 没有所有进程号相关的文件了.__
+
+
+
 ## User Namespace
 
 
