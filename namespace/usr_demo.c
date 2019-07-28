@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/mount.h>
-#include <sys/capability.h>
+//#include <sys/capability.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -25,7 +25,7 @@ void set_map(char* file, int inside_id, int outside_id, int len)
 {
     FILE* fd = fopen(file, "w");
     if (!fd) {
-        perror("open file(%s) failed!\n", file);
+	printf("open file(%s) failed!\n", file);
         return;
     }
     fprintf(fd, "%d %d %d", inside_id, outside_id, len);
@@ -63,7 +63,7 @@ int container_main()
 
     // remount "/proc" to make sure the "top" and "ps" show container's information
     // system("mount -t proc proc /proc");
-    mount("proc", "/proc", "proc", 0, NUYLL);
+    mount("proc", "/proc", "proc", 0, NULL);
 
     // 直接执行一个shell, 以便我们观察这个进程空间里的资源是否被隔离
     execv(container_args[0], container_args);
