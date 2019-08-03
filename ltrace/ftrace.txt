@@ -265,6 +265,9 @@ of ftrace。 以下是一些关键文件的列表：
 	This is a mask that lets the user only trace
 	on specified CPUs. The format is a hex string
 	representing the CPUs.
+  这是一个让用户只跟踪的掩码
+  在指定的CPU上。 格式为十六进制字符串
+  代表CPU。
 
   set_ftrace_filter:
 
@@ -276,6 +279,14 @@ of ftrace。 以下是一些关键文件的列表：
 	has a side effect of enabling or disabling specific functions
 	to be traced. Echoing names of functions into this file
 	will limit the trace to only those functions.
+  配置动态ftrace时（参见
+  在“动态ftrace”下面的部分，代码是动态的
+  修改（代码文本重写）以禁用调用
+  function profiler（mcount）。 这样可以配置跟踪
+  几乎没有性能开销。 这也是
+  具有启用或禁用特定功能的副作用
+  被追查。 将函数名称回送到此文件中
+  将跟踪限制为仅限于那些功能。
 
 	This interface also allows for commands to be used. See the
 	"Filter commands" section for more details.
@@ -286,22 +297,33 @@ of ftrace。 以下是一些关键文件的列表：
 	set_ftrace_filter. Any function that is added here will not
 	be traced. If a function exists in both set_ftrace_filter
 	and set_ftrace_notrace,	the function will _not_ be traced.
+  这具有与之相反的效果
+  set_ftrace_filter。 此处添加的任何功能都不会
+  被追查。 如果set_ftrace_filter中都存在函数
+  和set_ftrace_notrace，函数将_not_被跟踪。
 
   set_ftrace_pid:
 
 	Have the function tracer only trace a single thread.
+  让函数跟踪器只跟踪一个线程。
 
   set_event_pid:
 
 	Have the events only trace a task with a PID listed in this file.
 	Note, sched_switch and sched_wake_up will also trace events
 	listed in this file.
+  事件只跟踪具有此文件中列出的PID的任务。
+  注意，sched_switch和sched_wake_up也会跟踪事件
+  在此文件中列出。
 
   set_graph_function:
 
 	Set a "trigger" function where tracing should start
 	with the function graph tracer (See the section
 	"dynamic ftrace" for more details).
+  设置“触发器”功能，开始跟踪
+  使用函数图形跟踪器（参见章节
+  “动态ftrace”了解更多细节）。
 
   available_filter_functions:
 
@@ -310,6 +332,11 @@ of ftrace。 以下是一些关键文件的列表：
 	names that you can pass to "set_ftrace_filter" or
 	"set_ftrace_notrace". (See the section "dynamic ftrace"
 	below for more details.)
+  这列出了ftrace的功能
+  已处理并可追踪。 这些是功能
+  您可以传递给“set_ftrace_filter”或的名称
+  “set_ftrace_notrace”。 （参见“动态ftrace”部分
+  下面有更多细节。）
 
   enabled_functions:
 
@@ -321,16 +348,32 @@ of ftrace。 以下是一些关键文件的列表：
 	as well as the number of callbacks that have been attached.
 	Note, a callback may also call multiple functions which will
 	not be listed in this count.
+  这个文件更适合调试ftrace，但也很有用
+  在查看是否有任何函数附加回调。
+  跟踪基础结构不仅使用ftrace功能
+  跟踪实用程序，但其他子系统也可能。 这个文件
+  显示附加回调的所有函数
+  以及已附加的回调数量。
+  注意，回调也可以调用多个函数
+  不在此计数中列出。
 
 	If the callback registered to be traced by a function with
 	the "save regs" attribute (thus even more overhead), a 'R'
 	will be displayed on the same line as the function that
 	is returning registers.
+  如果回调注册为由函数跟踪
+  'save regs'属性（因此甚至更多开销），'R'
+  将显示在与该功能相同的行上
+  正在返回寄存器。
 
 	If the callback registered to be traced by a function with
 	the "ip modify" attribute (thus the regs->ip can be changed),
 	an 'I' will be displayed on the same line as the function that
 	can be overridden.
+  如果回调注册为由函数跟踪
+  “ip modify”属性（因此可以更改regs-> ip），
+  'I'将显示在与该功能相同的行上
+  可以被覆盖。
 
   function_profile_enabled:
 
@@ -340,20 +383,29 @@ of ftrace。 以下是一些关键文件的列表：
 	and if run with the function graph tracer, it will also keep
 	track of the time spent in those functions. The histogram
 	content can be displayed in the files:
+  设置后，它将启用具有该功能的所有功能
+  跟踪器，或者如果启用，则为函数图形跟踪器。 它会
+  保留被调用函数数量的直方图
+  如果使用函数图形跟踪器运行，它也会保留
+  跟踪在这些功能中花费的时间。 直方图
+  内容可以显示在文件中：
 
 	trace_stats/function<cpu> ( function0, function1, etc).
 
   trace_stats:
 
 	A directory that holds different tracing stats.
+  包含不同跟踪统计信息的目录。
 
   kprobe_events:
  
 	Enable dynamic trace points. See kprobetrace.txt.
+  启用动态跟踪点。 请参阅kprobetrace.txt。
 
   kprobe_profile:
 
 	Dynamic trace points stats. See kprobetrace.txt.
+  动态跟踪点统计信息。 请参阅kprobetrace.txt。
 
   max_graph_depth:
 
@@ -361,6 +413,10 @@ of ftrace。 以下是一些关键文件的列表：
 	it will trace into a function. Setting this to a value of
 	one will show only the first kernel function that is called
 	from user space.
+  与函数图形跟踪器一起使用。 这是最大深度
+  它将追溯到一个功能。 将其设置为值
+  一个将只显示被调用的第一个内核函数
+  来自用户空间。
 
   printk_formats:
 
@@ -371,6 +427,13 @@ of ftrace。 以下是一些关键文件的列表：
 	that string was. This file displays the string and address for
 	the string allowing tools to map the pointers to what the
 	strings were.
+  这适用于读取原始格式文件的工具。 如果一个事件在
+  环形缓冲区引用一个字符串（目前只有trace_printk（）
+  这样做），只有一个指向字符串的指针被记录到缓冲区中
+  而不是字符串本身。 这可以防止工具知道什么
+  那个字符串是。 此文件显示其字符串和地址
+  字符串允许工具将指针映射到
+  字符串是。
 
   saved_cmdlines:
 
@@ -379,29 +442,45 @@ of ftrace。 以下是一些关键文件的列表：
 	makes a cache of pid mappings to comms to try to display
 	comms for events. If a pid for a comm is not listed, then
 	"<...>" is displayed in the output.
+  除非将跟踪事件中的任务的pid记录下来
+  该事件还专门保存了任务comm。Ftrace
+  对pms进行pid映射缓存以尝试显示
+  通讯活动。 如果没有列出comm的pid，那么
+  输出中显示“<...>”。
 
   snapshot:
 
 	This displays the "snapshot" buffer and also lets the user
 	take a snapshot of the current running trace.
 	See the "Snapshot" section below for more details.
+  这将显示“快照”缓冲区并允许用户使用
+  拍摄当前运行轨迹的快照。
+  有关详细信息，请参阅下面的“快照”部分。
 
   stack_max_size:
 
 	When the stack tracer is activated, this will display the
 	maximum stack size it has encountered.
 	See the "Stack Trace" section below.
+  堆栈跟踪器激活后，将显示
+  它遇到的最大堆栈大小。
+  请参阅下面的“堆栈跟踪”部分。
 
   stack_trace:
 
 	This displays the stack back trace of the largest stack
 	that was encountered when the stack tracer is activated.
 	See the "Stack Trace" section below.
+  这将显示最大堆栈的堆栈跟踪跟踪
+  堆栈跟踪器激活时遇到的情况。
+  请参阅下面的“堆栈跟踪”部分。
 
   stack_trace_filter:
 
 	This is similar to "set_ftrace_filter" but it limits what
 	functions the stack tracer will check.
+  这与“set_ftrace_filter”类似，但它限制了什么
+  堆栈跟踪器将检查的函数。
 
   trace_clock:
 
@@ -412,6 +491,13 @@ of ftrace。 以下是一些关键文件的列表：
 	systems it may not be monotonic with respect to other
 	CPUs. In other words, the local clocks may not be in sync
 	with local clocks on other CPUs.
+  每当事件被记录到环形缓冲区中时，a
+  添加了“timestamp”。 这个邮票来自指定的
+  时钟。 默认情况下，ftrace使用“本地”时钟。 这个
+  时钟非常快，严格按每个CPU，但在一些
+  对于其他系统，它可能不是单调的
+  的CPU。 换句话说，本地时钟可能不同步
+  在其他CPU上使用本地时钟。
 
 	Usual clocks for tracing:
 
@@ -419,30 +505,49 @@ of ftrace。 以下是一些关键文件的列表：
 	  [local] global counter x86-tsc
 
 	  local: Default clock, but may not be in sync across CPUs
+    默认时钟，但可能不在CPU之间同步
 
 	  global: This clock is in sync with all CPUs but may
 	  	  be a bit slower than the local clock.
+    此时钟与所有CPU同步但可能
+    比本地时钟慢一点。
 
 	  counter: This is not a clock at all, but literally an atomic
 	  	   counter. It counts up one by one, but is in sync
 		   with all CPUs. This is useful when you need to
 		   know exactly the order events occurred with respect to
 		   each other on different CPUs.
+    这根本不是时钟，而是字面上的原子
+    计数器。 它逐个计数，但是同步
+    与所有CPU。 这在您需要时非常有用
+    确切地知道发生的订单事件
+    在不同的CPU上彼此。
 
 	  uptime: This uses the jiffies counter and the time stamp
 	  	  is relative to the time since boot up.
+    这使用了jiffies计数器和时间戳
+    是相对于启动后的时间。
 
 	  perf: This makes ftrace use the same clock that perf uses.
 	  	Eventually perf will be able to read ftrace buffers
 		and this will help out in interleaving the data.
+    这使得ftrace使用与perf相同的时钟。
+    最终perf将能够读取ftrace缓冲区
+    这将有助于交错数据。
 
 	  x86-tsc: Architectures may define their own clocks. For
 	  	   example, x86 uses its own TSC cycle clock here.
+    架构可以定义自己的时钟。 对于
+    例如，x86在此使用自己的TSC周期时钟。
 
 	  ppc-tb: This uses the powerpc timebase register value.
 		  This is in sync across CPUs and can also be used
 		  to correlate events across hypervisor/guest if
 		  tb_offset is known.
+    这使用powerpc时基寄存器值。
+    这在CPU之间是同步的，也可以使用
+    如果，关联管理程序/客户端之间的事件
+    tb_offset是众所周知的。
 
 	To set a clock, simply echo the clock name into this file.
 
@@ -453,10 +558,16 @@ of ftrace。 以下是一些关键文件的列表：
 	This is a very useful file for synchronizing user space
 	with events happening in the kernel. Writing strings into
 	this file will be written into the ftrace buffer.
+  这是用于同步用户空间的非常有用的文件
+  发生在内核中的事件。 将字符串写入
+  此文件将写入ftrace缓冲区。
 
 	It is useful in applications to open this file at the start
 	of the application and just reference the file descriptor
 	for the file.
+  在应用程序中，它在开始时打开此文件很有用
+  应用程序，只是引用文件描述符
+  为文件。
 
 	void trace_write(const char *fmt, ...)
 	{
@@ -482,16 +593,22 @@ of ftrace。 以下是一些关键文件的列表：
  
 	Add dynamic tracepoints in programs.
 	See uprobetracer.txt
+  在程序中添加动态跟踪点。
+  请参阅uprobetracer.txt
 
   uprobe_profile:
 
 	Uprobe statistics. See uprobetrace.txt
+  Uprobe统计。 请参阅uprobetrace.txt
 
   instances:
 
 	This is a way to make multiple trace buffers where different
 	events can be recorded in different buffers.
 	See "Instances" section below.
+  这是一种使多个跟踪缓冲区不同的方法
+  事件可以记录在不同的缓冲区中。
+  请参阅下面的“实例”部分。
 
   events:
 
@@ -501,12 +618,19 @@ of ftrace。 以下是一些关键文件的列表：
 	and how they are grouped by system. There are "enable"
 	files at various levels that can enable the tracepoints
 	when a "1" is written to them.
+  这是跟踪事件目录。 它包含事件跟踪点
+  已编译的（也称为静态跟踪点）
+  进入内核。 它显示了存在哪些事件跟踪点
+  以及它们如何按系统分组。 有“启用”
+  可以启用跟踪点的各种级别的文件
+  当写一个“1”时。
 
 	See events.txt for more information.
 
   per_cpu:
 
 	This is a directory that contains the trace per_cpu information.
+  这是一个包含跟踪per_cpu信息的目录。
 
   per_cpu/cpu0/buffer_size_kb:
 
@@ -516,18 +640,30 @@ of ftrace。 以下是一些关键文件的列表：
 	size buffers. This file is similar to the buffer_size_kb
 	file, but it only displays or sets the buffer size for the
 	specific CPU. (here cpu0).
+  ftrace缓冲区定义为per_cpu。 也就是说，有一个单独的
+  每个CPU的缓冲区允许以原子方式完成写入，
+  并且没有缓存弹跳。 这些缓冲区可能有所不同
+  大小缓冲。 该文件类似于buffer_size_kb
+  文件，但它只显示或设置缓冲区大小
+  特定的CPU。 （这里是cpu0）。
 
   per_cpu/cpu0/trace:
 
 	This is similar to the "trace" file, but it will only display
 	the data specific for the CPU. If written to, it only clears
 	the specific CPU buffer.
+  这类似于“跟踪”文件，但它只会显示
+  特定于CPU的数据。 如果写入，它只会清除
+  特定的CPU缓冲区。
 
   per_cpu/cpu0/trace_pipe
 
 	This is similar to the "trace_pipe" file, and is a consuming
 	read, but it will only display (and consume) the data specific
 	for the CPU.
+  这类似于“trace_pipe”文件，很费劲
+  读取，但它只显示（和使用）特定的数据
+  对于CPU。
 
   per_cpu/cpu0/trace_pipe_raw
 
@@ -537,9 +673,17 @@ of ftrace。 以下是一些关键文件的列表：
 	system call, the buffer data can be quickly transferred to
 	a file or to the network where a server is collecting the
 	data.
+  对于可以解析ftrace环形缓冲区二进制格式的工具，
+  trace_pipe_raw文件可用于提取数据
+  直接来自环形缓冲区。 使用接头（）
+  系统调用后，缓冲区数据可以快速传输到
+  一个文件或服务器正在收集的网络
+  数据。
 
 	Like trace_pipe, this is a consuming reader, where multiple
 	reads will always produce different data.
+  像trace_pipe一样，这是一个消费者，其中有多个
+  读取将始终产生不同的数据。
 
   per_cpu/cpu0/snapshot:
 
@@ -547,35 +691,54 @@ of ftrace。 以下是一些关键文件的列表：
 	snapshot the current CPU (if supported). It only displays
 	the content of the snapshot for a given CPU, and if
 	written to, only clears this CPU buffer.
+  这类似于主“快照”文件，但仅限于此
+  快照当前CPU（如果支持）。 它只显示
+  给定CPU的快照内容，以及是否
+  写入，只清除此CPU缓冲区。
 
   per_cpu/cpu0/snapshot_raw:
 
 	Similar to the trace_pipe_raw, but will read the binary format
 	from the snapshot buffer for the given CPU.
+  与trace_pipe_raw类似，但会读取二进制格式
+  来自给定CPU的快照缓冲区。
 
   per_cpu/cpu0/stats:
 
 	This displays certain stats about the ring buffer:
+  这会显示有关环形缓冲区的某些统计信息：
 
 	 entries: The number of events that are still in the buffer.
+   仍在缓冲区中的事件数。
 
 	 overrun: The number of lost events due to overwriting when
 	 	  the buffer was full.
+  由于覆盖时丢失事件的数量
+  缓冲区已满。
 
 	 commit overrun: Should always be zero.
 	 	This gets set if so many events happened within a nested
 		event (ring buffer is re-entrant), that it fills the
 		buffer and starts dropping events.
+  应始终为零。
+  如果嵌套中发生了如此多的事件，则会设置此项
+  事件（环形缓冲区是可重入的），它填充了
+  缓冲并开始丢弃事件。
 
 	 bytes: Bytes actually read (not overwritten).
+   字节实际读取（未覆盖）。
 
 	 oldest event ts: The oldest timestamp in the buffer
+   缓冲区中最旧的时间戳
 
 	 now ts: The current timestamp
+   当前时间戳
 
 	 dropped events: Events lost due to overwrite option being off.
+   由于覆盖选项关闭而导致事件丢失。
 
 	 read events: The number of events read.
+   读取的事件数。
 
 The Tracers
 -----------
@@ -585,6 +748,7 @@ Here is the list of current tracers that may be configured.
   "function"
 
 	Function call tracer to trace all kernel functions.
+  函数调用跟踪器来跟踪所有内核函数。
 
   "function_graph"
 
@@ -594,6 +758,12 @@ Here is the list of current tracers that may be configured.
 	and exit of the functions. It then provides the ability
 	to draw a graph of function calls similar to C code
 	source.
+  类似于函数跟踪器，除了
+  函数跟踪器探测其条目上的函数
+  而功能图跟踪器跟踪两个条目
+  并退出功能。 然后它提供了这种能力
+  绘制类似于C代码的函数调用图
+  资源。
 
   "irqsoff"
 
@@ -602,36 +772,57 @@ Here is the list of current tracers that may be configured.
 	See tracing_max_latency. When a new max is recorded,
 	it replaces the old trace. It is best to view this
 	trace with the latency-format option enabled.
+  类似于函数跟踪器，除了
+  函数跟踪器探测其条目上的函数
+  而功能图跟踪器跟踪两个条目
+  并退出功能。 然后它提供了这种能力
+  绘制类似于C代码的函数调用图
+  资源。...
 
   "preemptoff"
 
 	Similar to irqsoff but traces and records the amount of
 	time for which preemption is disabled.
+  类似于irqsoff但跟踪和记录的数量
+  抢占被禁用的时间。
 
   "preemptirqsoff"
 
 	Similar to irqsoff and preemptoff, but traces and
 	records the largest time for which irqs and/or preemption
 	is disabled.
+  类似于irqsoff和preemptoff，但跟踪和
+  记录irqs和/或抢占的最大时间
+  被禁用。
 
   "wakeup"
 
 	Traces and records the max latency that it takes for
 	the highest priority task to get scheduled after
 	it has been woken up.
+  跟踪并记录所需的最大延迟
+  在之后安排的最高优先级任务
+  它被唤醒了。
         Traces all tasks as an average developer would expect.
+        按照普通开发人员的预期跟踪所有任务。
 
   "wakeup_rt"
 
         Traces and records the max latency that it takes for just
         RT tasks (as the current "wakeup" does). This is useful
         for those interested in wake up timings of RT tasks.
+        跟踪并记录仅需要的最大延迟
+        RT任务（就像当前的“唤醒”一样）。 这很有用
+        对于那些对唤醒RT任务时间感兴趣的人。
 
   "nop"
 
 	This is the "trace nothing" tracer. To remove all
 	tracers from tracing simply echo "nop" into
 	current_tracer.
+  这是“无痕迹”的示踪剂。 要删除所有
+  跟踪追踪器简单地回应“nop”
+  current_tracer。
 
 
 Examples of using the tracer
@@ -676,6 +867,12 @@ number of events in the buffer as well as the total number of entries
 that were written. The difference is the number of entries that were
 lost due to the buffer filling up (250280 - 140080 = 110200 events
 lost).
+标题打印时带有表示的跟踪器名称
+踪迹。 在这种情况下，跟踪器是“功能”。 然后它显示了
+缓冲区中的事件数以及条目总数
+那是写的。 不同之处在于条目数
+由于缓冲区填满而丢失（250280  -  140080 = 110200事件
+丢失）。
 
 The header explains the content of the events. Task name "bash", the task
 PID "1977", the CPU that it was running on "000", the latency format
@@ -683,6 +880,12 @@ PID "1977", the CPU that it was running on "000", the latency format
 function name that was traced "sys_close" and the parent function that
 called this function "system_call_fastpath". The timestamp is the time
 at which the function was entered.
+标题解释了事件的内容。 任务名称“bash”，任务
+PID“1977”，它运行在“000”上的CPU，延迟格式
+（如下所述），时间戳采用<secs>。<usecs>格式，
+跟踪“sys_close”的函数名称和父函数
+将此函数称为“system_call_fastpath”。 时间戳是时间
+输入功能的位置。
 
 Latency trace format
 --------------------
@@ -690,6 +893,9 @@ Latency trace format
 When the latency-format option is enabled or when one of the latency
 tracers is set, the trace file gives somewhat more information to see
 why a latency happened. Here is a typical trace.
+启用延迟格式选项时或延迟时间之一
+如果设置了tracers，则跟踪文件会提供更多信息
+延迟发生的原因。 这是典型的痕迹。
 
 # tracer: irqsoff
 #
@@ -734,20 +940,34 @@ never changes) and the version of the kernel upon which this was executed on
 of trace entries displayed and the total number (both are four: #4/4).
 VP, KP, SP, and HP are always zero and are reserved for later use.
 #P is the number of online CPUs (#P:4).
+这表明当前的跟踪器是跟踪时间的“irqsoff”
+中断被禁用。 它给出了跟踪版本（其中
+永远不会改变）以及执行此操作的内核版本
+（3.10）。 然后它以微秒（259 us）显示最大延迟。 数字
+显示的跟踪条目和总数（均为四个：＃4/4）。
+VP，KP，SP和HP始终为零，保留供以后使用。
+#P是在线CPU的数量（#P：4）。
 
 The task is the process that was running when the latency
 occurred. (ps pid: 6143).
+任务是在延迟时运行的进程
+发生了。 （ps pid：6143）。
 
 The start and stop (the functions in which the interrupts were
 disabled and enabled respectively) that caused the latencies:
+启动和停止（中断的功能
+分别禁用和启用导致延迟的：
 
  __lock_task_sighand is where the interrupts were disabled.
  _raw_spin_unlock_irqrestore is where they were enabled again.
 
 The next lines after the header are the trace itself. The header
 explains which is which.
+标题后面的下一行是跟踪本身。 标题
+解释哪个是哪个。
 
   cmd: The name of the process in the trace.
+  跟踪中进程的名称。
 
   pid: The PID of that process.
 
@@ -757,6 +977,10 @@ explains which is which.
 	    Note: If the architecture does not support a way to
 		  read the irq flags variable, an 'X' will always
 		  be printed here.
+  'd'中断被禁用。'' 除此以外。
+  注意：如果架构不支持某种方式
+  读取irq标志变量，总是会出现'X'
+  在这里打印。
 
   need-resched:
 	'N' both TIF_NEED_RESCHED and PREEMPT_NEED_RESCHED is set,
@@ -778,11 +1002,19 @@ The above is mostly meaningful for kernel developers.
 	output includes a timestamp relative to the start of the
 	trace. This differs from the output when latency-format
 	is disabled, which includes an absolute timestamp.
+  启用延迟格式选项时，将跟踪文件
+  输出包括相对于开头的时间戳
+  跟踪。 这与延迟格式时的输出不同
+  已禁用，包括绝对时间戳。
 
   delay: This is just to help catch your eye a bit better. And
 	 needs to be fixed to be only relative to the same CPU.
 	 The marks are determined by the difference between this
 	 current trace and the next trace.
+  这只是为了让你的眼睛更好一点。 和
+  需要修复为仅相对于同一CPU。
+  标记由它之间的差异决定
+  当前跟踪和下一个跟踪。
 	  '$' - greater than 1 second
 	  '@' - greater than 100 milisecond
 	  '*' - greater than 10 milisecond
@@ -802,6 +1034,9 @@ trace_options
 The trace_options file (or the options directory) is used to control
 what gets printed in the trace output, or manipulate the tracers.
 To see what is available, simply cat the file:
+trace_options文件（或options目录）用于控制
+什么在跟踪输出中打印，或操纵跟踪器。
+要查看可用内容，只需捕获文件：
 
   cat trace_options
 print-parent
@@ -833,6 +1068,8 @@ function-trace
 
 To disable one of the options, echo in the option prepended with
 "no".
+要禁用其中一个选项，请在前面附带的选项中回显
+“没有”。
 
   echo noprint-parent > trace_options
 
@@ -844,6 +1081,8 @@ Here are the available options:
 
   print-parent - On function traces, display the calling (parent)
 		 function as well as the function being traced.
+  在函数跟踪上，显示调用（父）
+  功能以及被跟踪的功能。
 
   print-parent:
    bash-4000  [01]  1477.606694: simple_strtoul <-kstrtoul
@@ -856,18 +1095,26 @@ Here are the available options:
 	       offset in the function. For example, instead of
 	       seeing just "ktime_get", you will see
 	       "ktime_get+0xb/0x20".
+  不仅显示功能名称，还显示功能名称
+  函数中的偏移量。 例如，而不是
+  看到只是“ktime_get”，你会看到
+  “ktime_get+0XB/0×20”。
 
   sym-offset:
    bash-4000  [01]  1477.606694: simple_strtoul+0x6/0xa0
 
   sym-addr - this will also display the function address as well
 	     as the function name.
+  这也将显示功能地址
+  作为函数名称。
 
   sym-addr:
    bash-4000  [01]  1477.606694: simple_strtoul <c0339346>
 
   verbose - This deals with the trace file when the
             latency-format option is enabled.
+  这时处理跟踪文件
+  延迟格式选项已启用。
 
     bash  4000 1 0 00000000 00010a95 [58127d26] 1720.415ms \
     (+0.000ms): simple_strtoul (kstrtoul)
@@ -875,22 +1122,35 @@ Here are the available options:
   raw - This will display raw numbers. This option is best for
 	use with user applications that can translate the raw
 	numbers better than having it done in the kernel.
+  这将显示原始数字。 此选项最适合
+  使用可以翻译原始的用户应用程序
+  数字比在内核中完成更好。
 
   hex - Similar to raw, but the numbers will be in a hexadecimal
 	format.
+  与raw类似，但数字将以十六进制表示
+  格式。
 
   bin - This will print out the formats in raw binary.
+  这将打印出原始二进制格式。
 
   block - When set, reading trace_pipe will not block when polled.
+  设置后，读取trace_pipe将不会在轮询时阻止。
 
   stacktrace - This is one of the options that changes the trace
 	       itself. When a trace is recorded, so is the stack
 	       of functions. This allows for back traces of
 	       trace sites.
+  这是更改跟踪的选项之一
+  本身。 记录跟踪时，堆栈也是如此
+  功能。 这允许回溯痕迹
+  跟踪网站。
 
   trace_printk - Can disable trace_printk() from writing into the buffer.
+  可以禁止trace_printk（）写入缓冲区。
 
   branch - Enable branch tracing with the tracer.
+  使用跟踪器启用分支跟踪。
 
   annotate - It is sometimes confusing when the CPU buffers are full
   	     and one CPU buffer had a lot of events recently, thus
@@ -900,6 +1160,14 @@ Here are the available options:
 	     and it may look like only one CPU ran (the one with the
 	     oldest events). When the annotate option is set, it will
 	     display when a new CPU buffer started:
+  当CPU缓冲区已满时，有时会令人困惑
+  因此，最近有一个CPU缓冲区有很多事件
+  更短的时间框架，是另一个CPU可能只有
+  一些事件，让它有旧的事件。 什么时候
+  报告跟踪，它首先显示最早的事件，
+  它可能看起来只有一个CPU运行（带有
+  最古老的事件）。 设置annotate选项后，它会
+  在新的CPU缓冲区启动时显示：
 
           <idle>-0     [001] dNs4 21169.031481: wake_up_idle_cpu <-add_timer_on
           <idle>-0     [001] dNs4 21169.031482: _raw_spin_unlock_irqrestore <-add_timer_on
@@ -911,6 +1179,8 @@ Here are the available options:
 
   userstacktrace - This option changes the trace. It records a
 		   stacktrace of the current userspace thread.
+  此选项可更改跟踪。 它记录了一个
+  当前用户空间线程的堆栈跟踪。
 
   sym-userobj - when user stacktrace are enabled, look up which
 		object the address belongs to, and print a
@@ -918,6 +1188,12 @@ Here are the available options:
 		ASLR is on, otherwise you don't get a chance to
 		resolve the address to object/file/line after
 		the app is no longer running
+  启用用户堆栈跟踪时，查找哪个
+  地址所属的对象，并打印一个
+  相对地址。 这在以下情况下特别有用
+  ASLR开启了，否则你没有机会
+  之后将地址解析为object / file / line
+  该应用程序不再运行
 
 		The lookup is performed when you read
 		trace,trace_pipe. Example:
@@ -929,26 +1205,45 @@ x494] <- /root/a.out[+0x4a8] <- /lib/libc-2.7.so[+0x1e1a6]
   printk-msg-only - When set, trace_printk()s will only show the format
   		    and not their parameters (if trace_bprintk() or
 		    trace_bputs() was used to save the trace_printk()).
+  设置后，trace_printk（）s将仅显示格式
+  而不是他们的参数（如果是trace_bprintk（）或
+  trace_bputs（）用于保存trace_printk（））。
 
   context-info - Show only the event data. Hides the comm, PID,
   	         timestamp, CPU, and other useful data.
+  仅显示事件数据。 隐藏通讯，PID，
+  时间戳，CPU和其他有用的数据。
 
   latency-format - This option changes the trace. When
                    it is enabled, the trace displays
                    additional information about the
                    latencies, as described in "Latency
                    trace format".
+  此选项可更改跟踪。 什么时候
+  它已启用，跟踪显示
+  有关的更多信息
+  延迟，如“延迟”中所述
+  跟踪格式“。
 
   sleep-time - When running function graph tracer, to include
   	       the time a task schedules out in its function.
 	       When enabled, it will account time the task has been
 	       scheduled out as part of the function call.
+  运行函数图形跟踪器时，要包含
+  务计划在其功能中的时间。
+  启用后，它将占用任务的时间
+  计划作为函数调用的一部分。
 
   graph-time - When running function graph tracer, to include the
   	       time to call nested functions. When this is not set,
 	       the time reported for the function will only include
 	       the time the function itself executed for, not the time
 	       for functions that it called.
+  运行函数图形跟踪器时，要包含
+  是时候调用嵌套函数了。 如果没有设置，
+  报告的功能时间仅包括
+  函数本身执行的时间，而不是时间
+  对于它所调用的函数。
 
   record-cmd - When any event or tracer is enabled, a hook is enabled
   	       in the sched_switch trace point to fill comm cache
@@ -956,18 +1251,32 @@ x494] <- /root/a.out[+0x4a8] <- /lib/libc-2.7.so[+0x1e1a6]
 	       overhead, and if you only care about pids, and not the
 	       name of the task, disabling this option can lower the
 	       impact of tracing.
+  启用任何事件或跟踪器时，将启用挂钩
+  在sched_switch跟踪点中填充comm缓存
+  使用映射的pids和通信。 但这可能会导致一些问题
+  开销，如果你只关心pids，而不是
+  任务的名称，禁用此选项可以降低
+  追踪的影响。
 
   overwrite - This controls what happens when the trace buffer is
               full. If "1" (default), the oldest events are
               discarded and overwritten. If "0", then the newest
               events are discarded.
+  这可以控制跟踪缓冲区时发生的情况
+  充分。 如果为“1”（默认值），则最旧的事件为
+  丢弃和覆盖。 如果为“0”，那么最新
+  事件被丢弃。
 	        (see per_cpu/cpu0/stats for overrun and dropped)
 
   disable_on_free - When the free_buffer is closed, tracing will
   		    stop (tracing_on set to 0).
+  当free_buffer关闭时，跟踪将会
+  停止（tracing_on设置为0）。
 
   irq-info - Shows the interrupt, preempt count, need resched data.
   	     When disabled, the trace looks like:
+  显示中断，抢占计数，需要重新设置数据。
+  禁用时，跟踪如下所示：
 
 # tracer: function
 #
@@ -983,6 +1292,9 @@ x494] <- /root/a.out[+0x4a8] <- /lib/libc-2.7.so[+0x1e1a6]
   markers - When set, the trace_marker is writable (only by root).
   	    When disabled, the trace_marker will error with EINVAL
 	    on write.
+  设置后，trace_marker是可写的（仅限root）。
+  禁用时，trace_marker将因EINVAL而出错
+  在写。
 
 
   function-trace - The latency tracers will enable function tracing
@@ -990,9 +1302,16 @@ x494] <- /root/a.out[+0x4a8] <- /lib/libc-2.7.so[+0x1e1a6]
 	    it is disabled, the latency tracers do not trace
 	    functions. This keeps the overhead of the tracer down
 	    when performing latency tests.
+  延迟跟踪器将启用功能跟踪
+  如果启用此选项（默认为）。 什么时候
+  它被禁用，延迟跟踪器不跟踪
+  功能。 这样可以减少跟踪器的开销
+  执行延迟测试时。
 
  Note: Some tracers have their own options. They only appear
        when the tracer is active.
+一些示踪剂有自己的选择。 他们只出现
+当示踪剂处于活动状态时。
 
 
 
@@ -1004,12 +1323,22 @@ external event (besides NMIs and SMIs). This prevents the timer
 interrupt from triggering or the mouse interrupt from letting
 the kernel know of a new mouse event. The result is a latency
 with the reaction time.
+禁用中断时，CPU无法对其他任何内容做出反应
+外部事件（除了NMI和SMI）。 这可以防止计时器
+触发中断或让鼠标中断
+内核知道一个新的鼠标事件。 结果是延迟
+随着反应时间。
 
 The irqsoff tracer tracks the time for which interrupts are
 disabled. When a new maximum latency is hit, the tracer saves
 the trace leading up to that latency point so that every time a
 new maximum is reached, the old saved trace is discarded and the
 new trace is saved.
+irqsoff跟踪器跟踪中断的时间
+禁用。 当达到新的最大延迟时，跟踪器会保存
+导致延迟点的跟踪，以便每次都可以
+达到新的最大值，旧的保存的跟踪被丢弃并且
+保存新的跟踪。
 
 To reset the maximum, echo 0 into tracing_max_latency. Here is
 an example:
@@ -1067,6 +1396,12 @@ interrupts. The difference between the 16 and the displayed
 timestamp 25us occurred because the clock was incremented
 between the time of recording the max latency and the time of
 recording the function that had that latency.
+我们看到我们有一个16微秒的延迟（这是
+很好）。 run_timer_softirq中的_raw_spin_lock_irq已禁用
+中断。 16和显示之间的区别
+由于时钟递增，发生了时间戳25us
+在记录最大延迟和时间之间
+记录具有该延迟的功能。
 
 Note the above example had function-trace not set. If we set
 function-trace, we get a much larger output:
@@ -1145,6 +1480,11 @@ functions that were called during that time. Note that by
 enabling function tracing, we incur an added overhead. This
 overhead may extend the latency times. But nevertheless, this
 trace has provided some very helpful debugging information.
+在这里，我们追踪了71微秒的延迟。 但我们也看到了所有
+在此期间调用的函数。 请注意
+启用功能跟踪，我们会产生额外的开销。 这个
+开销可能会延长延迟时间。 但是，不过，这个
+trace提供了一些非常有用的调试信息。
 
 
 preemptoff
@@ -1154,11 +1494,19 @@ When preemption is disabled, we may be able to receive
 interrupts but the task cannot be preempted and a higher
 priority task must wait for preemption to be enabled again
 before it can preempt a lower priority task.
+禁用抢占后，我们可能会收到
+中断，但任务不能被抢占和更高
+优先级任务必须等待再次启用抢占
+在它可以抢占较低优先级的任务之前。
 
 The preemptoff tracer traces the places that disable preemption.
 Like the irqsoff tracer, it records the maximum latency for
 which preemption was disabled. The control of preemptoff tracer
 is much like the irqsoff tracer.
+preemptoff tracer跟踪禁用抢占的位置。
+与irqsoff跟踪器一样，它记录了最大延迟
+哪个先发制人被禁用。 控制先发制人示踪剂
+就像irqsoff示踪剂一样。
 
  # echo 0 > options/function-trace
  # echo preemptoff > current_tracer
@@ -1204,6 +1552,12 @@ But we also see that interrupts have been disabled when entering
 the preempt off section and leaving it (the 'd'). We do not know if
 interrupts were enabled in the mean time or shortly after this
 was over.
+这有一些更改。 抢先被禁用了
+中断进来（注意'h'），并在退出时启用。
+但我们也看到进入时已禁用中断
+抢先断开并留下它（'d'）。 我们不知道是否
+中断时间或此后不久启用
+已经完了。
 
 # tracer: preemptoff
 #
@@ -1275,6 +1629,12 @@ the entire time. The irq_enter code lets us know that we entered
 an interrupt 'h'. Before that, the functions being traced still
 show that it is not in an interrupt, but we can see from the
 functions themselves that this is not the case.
+以上是带有的preemptoff trace的示例
+功能跟踪集。 在这里，我们看到中断未被禁用
+整个时间。 irq_enter代码让我们知道我们输入了
+中断'h'。 在此之前，所追踪的功能仍然存在
+表明它不是在中断，但我们可以从中看到
+事实并非如此。
 
 preemptirqsoff
 --------------
@@ -1283,6 +1643,10 @@ Knowing the locations that have interrupts disabled or
 preemption disabled for the longest times is helpful. But
 sometimes we would like to know when either preemption and/or
 interrupts are disabled.
+知道中断的位置已禁用或
+抢占最长时间禁用是有帮助的。 但
+有时我们想知道何时抢先和/或
+中断被禁用。
 
 Consider the following code:
 
@@ -1306,6 +1670,10 @@ But neither will trace the time that interrupts and/or
 preemption is disabled. This total time is the time that we can
 not schedule. To record this time, use the preemptirqsoff
 tracer.
+但两者都不会追踪中断和/或中断的时间
+抢占被禁用。 总时间是我们可以的时间
+不安排。 要记录此时间，请使用preemptirqsoff
+示踪剂。
 
 Again, using this trace is much like the irqsoff and preemptoff
 tracers.
@@ -1368,6 +1736,11 @@ interrupts are disabled in the assembly code. Without the
 function tracing, we do not know if interrupts were enabled
 within the preemption points. We do see that it started with
 preemption enabled.
+trace_hardirqs_off_thunk是从x86上的程序集调用的
+汇编代码中禁用了中断。 没有
+函数跟踪，我们不知道是否启用了中断
+在先发制人点内。 我们确实看到它始于
+抢占已启用。
 
 Here is a trace with function-trace set:
 
@@ -1468,6 +1841,12 @@ rq lock and enabled interrupts (but not preemption) an interrupt
 triggered. When the interrupt finished, it started running softirqs.
 But while the softirq was running, another interrupt triggered.
 When an interrupt is running inside a softirq, the annotation is 'H'.
+这是一个有趣的痕迹。 它始于kworker运行和
+安排和接管。 但是，只要她释放了
+rq锁定并启用中断（但不是抢占）中断
+触发。 当中断结束时，它开始运行softirqs。
+但是当softirq运行时，又触发了另一个中断。
+当一个中断在softirq内运行时，注释为“H”。
 
 
 wakeup
@@ -1477,6 +1856,10 @@ One common case that people are interested in tracing is the
 time it takes for a task that is woken to actually wake up.
 Now for non Real-Time tasks, this can be arbitrary. But tracing
 it none the less can be interesting. 
+人们对追踪感兴趣的一个常见情况是
+被唤醒的任务实际唤醒所需的时间。
+现在对于非实时任务，这可以是任意的。 但追查
+它可以是有趣的。
 
 Without function tracing:
 
@@ -1514,9 +1897,16 @@ to avoid tracing the normal circumstances. Here we see that
 the kworker with a nice priority of -20 (not very nice), took
 just 15 microseconds from the time it woke up, to the time it
 ran.
+跟踪器仅跟踪系统中的最高优先级任务
+避免追查正常情况。 在这里我们看到了
+优先考虑-20（不是很好）的kworker，拿走了
+从它醒来到它的时间只有15微秒
+跑了。
 
 Non Real-Time tasks are not that interesting. A more interesting
 trace is to concentrate only on Real-Time tasks.
+非实时任务并不那么有趣。 更有趣
+跟踪只关注实时任务。
 
 wakeup_rt
 ---------
@@ -1529,6 +1919,14 @@ also important to know the scheduling latency of non-RT tasks,
 but the average schedule latency is better for non-RT tasks.
 Tools like LatencyTop are more appropriate for such
 measurements.
+在实时环境中，了解它是非常重要的
+唤醒时间唤醒所需的最高优先级任务
+直到它执行的时间。 这也称为“时间表”
+延迟“。我强调这是关于RT任务的。这是
+了解非RT任务的调度延迟也很重要，
+但非RT任务的平均调度延迟更好。
+像LatencyTop这样的工具更适合这样
+测量。
 
 Real-Time environments are interested in the worst case latency.
 That is the longest latency it takes for something to happen,
@@ -1540,11 +1938,25 @@ not recorded because the tracer only records one worst case and
 tracing non-RT tasks that are unpredictable will overwrite the
 worst case latency of RT tasks (just run the normal wakeup
 tracer for a while to see that effect).
+实时环境对最坏情况的延迟感兴趣。
+这是事情发生所需的最长延迟，
+而不是平均水平。 我们可以有一个非常快速的调度程序
+偶尔只有很大的延迟，但事实并非如此
+适用于实时任务。 wakeup_rt跟踪器是专门设计的
+记录最坏情况的RT任务唤醒。 非RT任务是
+没有记录，因为跟踪器只记录了一个最坏的情况和
+跟踪不可预测的非RT任务将覆盖
+最糟糕的RT任务延迟（只需运行正常的唤醒
+跟踪器有一段时间看到那种效果）。
 
 Since this tracer only deals with RT tasks, we will run this
 slightly differently than we did with the previous tracers.
 Instead of performing an 'ls', we will run 'sleep 1' under
 'chrt' which changes the priority of the task.
+由于此跟踪器仅处理RT任务，因此我们将运行此任务
+与之前的示踪剂略有不同。
+我们将运行'sleep 1'而不是执行'ls'
+'chrt'改变了任务的优先级。
 
  # echo 0 > options/function-trace
  # echo wakeup_rt > current_tracer
@@ -1583,11 +1995,20 @@ to perform the task switch.  Note, since the trace point in the schedule
 is before the actual "switch", we stop the tracing when the recorded task
 is about to schedule in. This may change if we add a new marker at the
 end of the scheduler.
+在空闲系统上运行它，我们发现它只用了5微秒
+执行任务切换。 注意，由于计划中的跟踪点
+在实际“切换”之前，我们在记录任务时停止跟踪
+即将安排。如果我们添加一个新的标记，这可能会改变
+调度程序的结束。
 
 Notice that the recorded task is 'sleep' with the PID of 2389
 and it has an rt_prio of 5. This priority is user-space priority
 and not the internal kernel priority. The policy is 1 for
 SCHED_FIFO and 2 for SCHED_RR.
+请注意，记录的任务是“睡眠”，PID为2389
+它的rt_prio为5.优先级是用户空间优先级
+而不是内部内核优先级。 该政策是1为
+SCHED_FIFO和SCHED_RR的2。
 
 Note, that the trace data shows the internal priority (99 - rtprio).
 
@@ -1597,6 +2018,10 @@ The 0:120:R means idle was running with a nice priority of 0 (120 - 20)
 and in the running state 'R'. The sleep task was scheduled in with
 2389: 94:R. That is the priority is the kernel rtprio (99 - 5 = 94)
 and it too is in the running state.
+0：120：R表示空闲正在运行，优先级为0（120  -  20）
+并处于运行状态'R'。 睡眠任务安排在
+2389：94：R。 那是优先级是内核rtprio（99  -  5 = 94）
+它也处于运行状态。
 
 Doing the same with chrt -r 5 and function-trace set.
 
@@ -1707,10 +2132,15 @@ Doing the same with chrt -r 5 and function-trace set.
 
 This isn't that big of a trace, even with function tracing enabled,
 so I included the entire trace.
+即使启用了功能跟踪，这也不是很大的痕迹，
+所以我包括了整个跟踪。
 
 The interrupt went off while when the system was idle. Somewhere
 before task_woken_rt() was called, the NEED_RESCHED flag was set,
 this is indicated by the first occurrence of the 'N' flag.
+当系统空闲时，中断关闭。 某处
+在调用task_woken_rt（）之前，设置了NEED_RESCHED标志，
+这由第一次出现'N'标志表示。
 
 Latency tracing and events
 --------------------------
@@ -1718,6 +2148,10 @@ As function tracing can induce a much larger latency, but without
 seeing what happens within the latency it is hard to know what
 caused it. There is a middle ground, and that is with enabling
 events.
+由于函数跟踪可以导致更大的延迟，但没有
+看到延迟内发生了什么，很难知道是什么
+引起了它。 有一个中间立场，那就是启用
+事件。
 
  # echo 0 > options/function-trace
  # echo wakeup_rt > current_tracer
@@ -1765,6 +2199,10 @@ This tracer is the function tracer. Enabling the function tracer
 can be done from the debug file system. Make sure the
 ftrace_enabled is set; otherwise this tracer is a nop.
 See the "ftrace_enabled" section below.
+该跟踪器是函数跟踪器。 启用功能跟踪器
+可以从调试文件系统完成。 确保
+ftrace_enabled已设置; 否则这个示踪剂是一个nop。
+请参阅下面的“ftrace_enabled”部分。
 
  # sysctl kernel.ftrace_enabled=1
  # echo function > current_tracer
@@ -1803,6 +2241,15 @@ tracing directly from a program. This allows you to stop the
 tracing at the point that you hit the part that you are
 interested in. To disable the tracing directly from a C program,
 something like following code snippet can be used:
+注意：函数跟踪器使用环形缓冲区来存储上述内容
+条目。 最新数据可能会覆盖最旧的数据。
+有时使用echo来停止跟踪是不够的，因为
+跟踪可能会覆盖您想要的数据
+记录。 出于这个原因，有时最好禁用
+直接从程序中跟踪。 这可以让你停止
+追踪你击中你所属的部分
+感兴趣。要直接从C程序禁用跟踪，
+可以使用以下代码片段之类的内容：
 
 int trace_fd;
 [...]
@@ -1822,6 +2269,8 @@ Single thread tracing
 
 By writing into set_ftrace_pid you can trace a
 single thread. For example:
+通过写入set_ftrace_pid，您可以跟踪a
+单线程。 例如：
 
 # cat set_ftrace_pid
 no pid
@@ -1965,27 +2414,47 @@ task_struct. On function entry the tracer overwrites the return
 address of each function traced to set a custom probe. Thus the
 original return address is stored on the stack of return address
 in the task_struct.
+此跟踪器类似于函数跟踪器，除了它
+探测其入口和出口的函数。 这是通过
+在每个中使用动态分配的返回地址堆栈
+task_struct中。 在函数输入上，跟踪器会覆盖返回值
+跟踪的每个函数的地址以设置自定义探针。 就这样
+原始返回地址存储在返回地址的堆栈中
+在task_struct中。
 
 Probing on both ends of a function leads to special features
 such as:
+探测功能的两端会产生特殊功能
+如：
 
 - measure of a function's time execution
+  衡量一个函数的执行时间
 - having a reliable call stack to draw function calls graph
+  有一个可靠的调用堆栈来绘制函数调用图
 
 This tracer is useful in several situations:
 
 - you want to find the reason of a strange kernel behavior and
   need to see what happens in detail on any areas (or specific
   ones).
+  你想找到奇怪的内核行为的原因和
+  需要了解任何领域（或具体的）详细情况
+  那些）。
 
 - you are experiencing weird latencies but it's difficult to
   find its origin.
+  你遇到了奇怪的延迟，但很难
+  找到它的起源。
 
 - you want to find quickly which path is taken by a specific
   function
+  你想快速找到具体的路径
+  功能
 
 - you just want to peek inside a working kernel and want to see
   what happens there.
+  你只是想偷看一个正常工作的内核，并希望看到
+  那里发生了什么。
 
 # tracer: function_graph
 #
@@ -2013,11 +2482,18 @@ This tracer is useful in several situations:
 There are several columns that can be dynamically
 enabled/disabled. You can use every combination of options you
 want, depending on your needs.
+有几列可以动态
+启用/禁用。 您可以使用每种选项组合
+希望，取决于您的需求。
 
 - The cpu number on which the function executed is default
   enabled.  It is sometimes better to only trace one cpu (see
   tracing_cpu_mask file) or you might sometimes see unordered
   function calls while cpu tracing switch.
+  执行该函数的cpu编号是默认值
+  启用。 有时最好只跟踪一个cpu（参见
+  tracing_cpu_mask文件）或者您有时可能会看到无序
+  cpu跟踪开关时的函数调用。
 
 	hide: echo nofuncgraph-cpu > trace_options
 	show: echo funcgraph-cpu > trace_options
@@ -2026,12 +2502,18 @@ want, depending on your needs.
   the closing bracket line of a function or on the same line
   than the current function in case of a leaf one. It is default
   enabled.
+  显示持续时间（功能的执行时间）
+  函数的右括号行或同一行
+  比叶子的情况下的当前功能。 这是默认的
+  启用。
 
 	hide: echo nofuncgraph-duration > trace_options
 	show: echo funcgraph-duration > trace_options
 
 - The overhead field precedes the duration field in case of
   reached duration thresholds.
+  如果是，则开销字段在持续时间字段之前
+  达到持续时间阈值。
 
 	hide: echo nofuncgraph-overhead > trace_options
 	show: echo funcgraph-overhead > trace_options
@@ -2087,6 +2569,8 @@ want, depending on your needs.
 
 - The task/pid field displays the thread cmdline and pid which
   executed the function. It is default disabled.
+  task / pid字段显示线程cmdline和pid
+  执行了这个功能。 它是默认禁用的。
 
 	hide: echo nofuncgraph-proc > trace_options
 	show: echo funcgraph-proc > trace_options
@@ -2111,6 +2595,9 @@ want, depending on your needs.
 - The absolute time field is an absolute timestamp given by the
   system clock since it started. A snapshot of this time is
   given on each entry/exit of functions
+  绝对时间字段是由。给出的绝对时间戳
+  系统时钟自启动以来。 这次的快照是
+  在每个函数的进入/退出时给出
 
 	hide: echo nofuncgraph-abstime > trace_options
 	show: echo funcgraph-abstime > trace_options
@@ -2138,11 +2625,18 @@ want, depending on your needs.
 The function name is always displayed after the closing bracket
 for a function if the start of that function is not in the
 trace buffer.
+函数名称始终显示在右括号后面
+对于函数，如果该函数的开头不在
+跟踪缓冲区。
 
 Display of the function name after the closing bracket may be
 enabled for functions whose start is in the trace buffer,
 allowing easier searching with grep for function durations.
 It is default disabled.
+可以在结束括号后显示功能名称
+为启动在跟踪缓冲区中的函数启用，
+允许使用grep更容易地搜索功能持续时间。
+它是默认禁用的。
 
 	hide: echo nofuncgraph-tail > trace_options
 	show: echo funcgraph-tail > trace_options
@@ -2165,6 +2659,10 @@ You can put some comments on specific functions by using
 trace_printk() For example, if you want to put a comment inside
 the __might_sleep() function, you just have to include
 <linux/ftrace.h> and call trace_printk() inside __might_sleep()
+您可以使用，对特定功能发表一些评论
+trace_printk（）例如，如果要在其中放置注释
+__might_sleep（）函数，你只需要包含
+<linux / ftrace.h>并在__might_sleep（）内调用trace_printk（
 
 trace_printk("I'm a comment!\n")
 
@@ -2178,6 +2676,9 @@ will produce:
 You might find other useful features for this tracer in the
 following "dynamic ftrace" section such as tracing only specific
 functions or tasks.
+您可能会在此中找到此跟踪器的其他有用功能
+跟随“动态ftrace”部分，例如仅跟踪特定的跟踪
+功能或任务。
 
 dynamic ftrace
 --------------
@@ -2188,6 +2689,12 @@ this works is the mcount function call (placed at the start of
 every kernel function, produced by the -pg switch in gcc),
 starts of pointing to a simple return. (Enabling FTRACE will
 include the -pg switch in the compiling of the kernel.)
+如果设置了CONFIG_DYNAMIC_FTRACE，系统将运行
+禁用功能跟踪时几乎没有开销。 方式
+这个工作是mcount函数调用（放在开头的
+每个内核函数，由gcc中的-pg开关产生，
+开始指向一个简单的回报。 （启用FTRACE会
+在编译内核时包含-pg开关。）
 
 At compile time every C file object is run through the
 recordmcount program (located in the scripts directory). This
@@ -2196,12 +2703,24 @@ the locations in the .text section that call mcount. (Note, only
 white listed .text sections are processed, since processing other
 sections like .init.text may cause races due to those sections
 being freed unexpectedly).
+在编译时，每个C文件对象都通过
+recordmcount程序（位于脚本目录中）。 这个
+程序将解析C对象中的ELF头以查找全部
+.text部分中调用mcount的位置。 （请注意，仅限
+白名单.text部分被处理，因为处理其他
+像.init.text这样的部分可能会因这些部分而导致比赛
+被意外释放）。
 
 A new section called "__mcount_loc" is created that holds
 references to all the mcount call sites in the .text section.
 The recordmcount program re-links this section back into the
 original object. The final linking stage of the kernel will add all these
 references into a single table.
+创建了一个名为“__mcount_loc”的新部分
+引用.text部分中的所有mcount调用站点。
+recordmcount程序将此部分重新链接到
+原始物体。 内核的最后一个链接阶段将添加所有这些
+引用到单个表中。
 
 On boot up, before SMP is initialized, the dynamic ftrace code
 scans this table and updates all the locations into nops. It
@@ -2211,6 +2730,14 @@ are loaded and before they are executed.  When a module is
 unloaded, it also removes its functions from the ftrace function
 list. This is automatic in the module unload code, and the
 module author does not need to worry about it.
+在启动时，在初始化SMP之前，动态ftrace代码
+扫描此表并将所有位置更新为nops。 它
+还会记录添加到的位置
+available_filter_functions列表。 模块按原样处理
+在执行之前加载。 当一个模块是
+卸载时，它还会从ftrace函数中删除其功能
+名单。 这在模块卸载代码中是自动的，而且
+模块作者不需要担心它。
 
 When tracing is enabled, the process of modifying the function
 tracepoints is dependent on architecture. The old method is to use
@@ -2220,24 +2747,46 @@ if the modified code crosses cache (or page) boundaries), and the nops are
 patched back to calls. But this time, they do not call mcount
 (which is just a function stub). They now call into the ftrace
 infrastructure.
+启用跟踪时，修改功能的过程
+跟踪点取决于体系结构。 旧的方法是使用
+kstop_machine用于防止CPU执行代码的比赛
+修改（这可能导致CPU做出不良的事情，特别是
+如果修改后的代码跨越缓存（或页面）边界），那么nops就是
+打回电话。 但这一次，他们不打电话给mcount
+（这只是一个函数存根）。 他们现在打电话给ftrace
+基础设施。
 
 The new method of modifying the function tracepoints is to place
 a breakpoint at the location to be modified, sync all CPUs, modify
 the rest of the instruction not covered by the breakpoint. Sync
 all CPUs again, and then remove the breakpoint with the finished
 version to the ftrace call site.
+修改函数跟踪点的新方法是放置
+要修改的位置的断点，同步所有CPU，修改
+断点未涵盖的其余指令。 同步
+再次使用所有CPU，然后使用完成后删除断点
+版本到ftrace呼叫站点。
 
 Some archs do not even need to monkey around with the synchronization,
 and can just slap the new code on top of the old without any
 problems with other CPUs executing it at the same time.
+有些拱门甚至不需要同步，
+并且可以在没有任何东西的情况下将新代码打到旧的顶部
+其他CPU同时执行它的问题。
 
 One special side-effect to the recording of the functions being
 traced is that we can now selectively choose which functions we
 wish to trace and which ones we want the mcount calls to remain
 as nops.
+记录功能的一个特殊副作用
+追踪的是我们现在可以有选择地选择我们的功能
+希望跟踪以及我们希望mcount调用保留哪些
+作为nops。
 
 Two files are used, one for enabling and one for disabling the
 tracing of specified functions. They are:
+使用了两个文件，一个用于启用，另一个用于禁用
+追踪指定的功能。 他们是：
 
   set_ftrace_filter
 
@@ -2428,9 +2977,14 @@ Dynamic ftrace with the function graph tracer
 Although what has been explained above concerns both the
 function tracer and the function-graph-tracer, there are some
 special features only available in the function-graph tracer.
+虽然上面已经解释的内容涉及两者
+函数跟踪器和函数图形跟踪器，有一些
+仅在功能图跟踪器中提供的特殊功能。
 
 If you want to trace only one function and all of its children,
 you just have to echo its name into set_graph_function:
+如果您只想跟踪一个函数及其所有子函数，
+你只需要将其名称回显到set_graph_function：
 
  echo __do_fault > set_graph_function
 
@@ -2479,6 +3033,8 @@ You can also expand several functions at once:
 
 Now if you want to go back to trace all functions you can clear
 this special filter via:
+现在，如果您想返回跟踪所有可以清除的功能
+这个特殊的过滤器：
 
  echo > set_graph_function
 
@@ -2491,6 +3047,11 @@ function tracer. By default it is enabled (when function tracing is
 enabled in the kernel). If it is disabled, all function tracing is
 disabled. This includes not only the function tracers for ftrace, but
 also for any other uses (perf, kprobes, stack tracing, profiling, etc).
+注意，proc sysctl ftrace_enable是一个很大的开/关开关
+功能追踪器。 默认情况下启用它（当函数跟踪时
+在内核中启用）。 如果禁用，则所有功能跟踪都是
+禁用。 这不仅包括ftrace的函数跟踪器，而且包括
+也适用于任何其他用途（perf，kprobes，堆栈跟踪，分析等）。
 
 Please disable this with care.
 
@@ -2510,6 +3071,8 @@ Filter commands
 
 A few commands are supported by the set_ftrace_filter interface.
 Trace commands have the following format:
+set_ftrace_filter接口支持一些命令。
+跟踪命令具有以下格式：
 
 <function>:<command>:<parameter>
 
@@ -2519,6 +3082,9 @@ The following commands are supported:
   This command enables function filtering per module. The
   parameter defines the module. For example, if only the write*
   functions in the ext3 module are desired, run:
+  此命令启用每个模块的功能过滤。该
+  参数定义模块。 例如，如果只写*
+  需要ext3模块中的函数，运行：
 
    echo 'write*:mod:ext3' > set_ftrace_filter
 
@@ -2527,11 +3093,18 @@ The following commands are supported:
   in a different module is accomplished by appending (>>) to the
   filter file. Remove specific module functions by prepending
   '!':
+  此命令以与以下相同的方式与过滤器交互
+  基于函数名称的过滤。 因此，添加更多功能
+  在一个不同的模块中通过追加（>>）来完成
+  过滤文件。 通过预先删除删除特定的模块功能
+  '！'：
 
    echo '!writeback*:mod:ext3' >> set_ftrace_filter
 
   Mod command supports module globbing. Disable tracing for all
   functions except a specific module:
+  Mod命令支持模块通配。 禁用所有人的跟踪
+  除特定模块外的功能：
 
    echo '!*:mod:!ext3' >> set_ftrace_filter
 
@@ -2553,6 +3126,11 @@ The following commands are supported:
   tracing system is turned on and off. If unspecified, there is
   no limit. For example, to disable tracing when a schedule bug
   is hit the first 5 times, run:
+  这些命令在指定时打开和关闭跟踪
+  功能被击中。 该参数确定了多少次
+  跟踪系统打开和关闭。 如果未指定，则有
+  没有限制。 例如，在计划错误时禁用跟踪
+  是前5次命中，运行：
 
    echo '__schedule_bug:traceoff:5' > set_ftrace_filter
 
@@ -2563,6 +3141,9 @@ The following commands are supported:
   These commands are cumulative whether or not they are appended
   to set_ftrace_filter. To remove a command, prepend it by '!'
   and drop the parameter:
+  无论是否附加这些命令都是累积的
+  到set_ftrace_filter。 要删除命令，请在“！”前面加上它。
+  并删除参数：
 
    echo '!__schedule_bug:traceoff:0' > set_ftrace_filter
 
@@ -2573,6 +3154,7 @@ The following commands are supported:
 
 - snapshot
   Will cause a snapshot to be triggered when the function is hit.
+  将在命中函数时触发快照。
 
    echo 'native_flush_tlb_others:snapshot' > set_ftrace_filter
 
@@ -2592,6 +3174,12 @@ The following commands are supported:
   a "soft" mode. That is, the tracepoint will be called, but
   just will not be traced. The event tracepoint stays in this mode
   as long as there's a command that triggers it.
+  这些命令可以启用或禁用跟踪事件。 请注意，因为
+  当这些命令时，函数跟踪回调非常敏感
+  已注册，跟踪点已激活，但已禁用
+  一种“软”模式。 也就是说，将调用tracepoint，但是
+  只是不会被追查。 事件跟踪点保持此模式
+  只要有一个触发它的命令。
 
    echo 'try_to_wake_up:enable_event:sched:sched_switch:2' > \
    	 set_ftrace_filter
@@ -2615,12 +3203,21 @@ The following commands are supported:
   something, and want to dump the trace when a certain function
   is hit. Perhaps its a function that is called before a tripple
   fault happens and does not allow you to get a regular dump.
+  当命中该函数时，它将转储ftrace的内容
+  环形缓冲区到控制台。 如果需要调试，这很有用
+  什么东西，并希望在某个功能时转储跟踪
+  被打了。 也许它是一个在tripple之前调用的函数
+  发生故障并且不允许您获得常规转储。
 
 - cpudump
   When the function is hit, it will dump the contents of the ftrace
   ring buffer for the current CPU to the console. Unlike the "dump"
   command, it only prints out the contents of the ring buffer for the
   CPU that executed the function that triggered the dump.
+  当命中该函数时，它将转储ftrace的内容
+  当前CPU到控制台的环形缓冲区。 与“转储”不同
+  命令，它只打印出环形缓冲区的内容
+  执行触发转储功能的CPU。
 
 trace_pipe
 ----------
@@ -2629,6 +3226,10 @@ The trace_pipe outputs the same content as the trace file, but
 the effect on the tracing is different. Every read from
 trace_pipe is consumed. This means that subsequent reads will be
 different. The trace is live.
+trace_pipe输出与跟踪文件相同的内容，但是
+对追踪的影响是不同的。 每一次阅读
+trace_pipe已被使用。 这意味着后续读取将是
+不同。 跟踪是实时的。
 
  # echo function > current_tracer
  # cat trace_pipe > /tmp/trace.out &
@@ -2674,6 +3275,12 @@ used to modify the size of the internal trace buffers. The
 number listed is the number of entries that can be recorded per
 CPU. To know the full size, multiply the number of possible CPUs
 with the number of entries.
+拥有太多或不足够的数据可能会很麻烦
+诊断内核中的问题。 文件buffer_size_kb是
+用于修改内部跟踪缓冲区的大小。该
+列出的数字是每个可以记录的条目数
+中央处理器。 要知道完整大小，请乘以可能的CPU数
+与条目数量。
 
  # cat buffer_size_kb
 1408 (units kilobytes)
@@ -2691,6 +3298,8 @@ To modify the buffer, simple echo in a number (in 1024 byte segments).
 
 It will try to allocate as much as possible. If you allocate too
 much, it can cause Out-Of-Memory to trigger.
+它将尝试尽可能多地分配。 如果你也分配
+很多，它可能导致Out-Of-Memory触发。
 
  # echo 1000000000000 > buffer_size_kb
 -bash: echo: write error: Cannot allocate memory
@@ -2704,6 +3313,8 @@ The per_cpu buffers can be changed individually as well:
 
 When the per_cpu buffers are not the same, the buffer_size_kb
 at the top level will just show an X
+当per_cpu缓冲区不相同时，buffer_size_kb
+在顶层只会显示一个X.
 
  # cat buffer_size_kb
 X
@@ -2715,6 +3326,8 @@ This is where the buffer_total_size_kb is useful:
 
 Writing to the top level buffer_size_kb will reset all the buffers
 to be the same again.
+写入顶级buffer_size_kb将重置所有缓冲区
+再次相同。
 
 Snapshot
 --------
@@ -2723,11 +3336,20 @@ available to all non latency tracers. (Latency tracers which
 record max latency, such as "irqsoff" or "wakeup", can't use
 this feature, since those are already using the snapshot
 mechanism internally.)
+CONFIG_TRACER_SNAPSHOT生成通用快照功能
+适用于所有非延迟跟踪器。 （延迟示踪剂
+记录最大延迟，例如“irqsoff”或“wakeup”，不能使用
+此功能，因为那些已经在使用快照
+内部机制。）
 
 Snapshot preserves a current trace buffer at a particular point
 in time without stopping tracing. Ftrace swaps the current
 buffer with a spare buffer, and tracing continues in the new
 current (=previous spare) buffer.
+快照在特定点保留当前跟踪缓冲区
+及时不停止追踪。 Ftrace交换电流
+缓冲区带有备用缓冲区，并在新的缓冲区中继续跟踪
+current（= previous spare）缓冲区。
 
 The following debugfs files in "tracing" are related to this
 feature:
@@ -2743,6 +3365,15 @@ feature:
 	in parallel. When the spare buffer is allocated, echoing
 	0 frees it, and echoing else (positive) values clear the
 	snapshot contents.
+  这用于拍摄快照并读取输出
+  快照。 回声1进入这个文件来分配一个
+  备用缓冲区并拍摄快照（交换），然后读取
+  此文件中的快照格式与
+  “追踪”（上文“文件”部分所述）
+  系统“）。快照和跟踪都是可执行的
+  在平行下。 当分配备用缓冲区时，回显
+  0释放它，并回显其他（正）值清除
+  快照内容。
 	More details are shown in the table below.
 
 	status\input  |     0      |     1      |    else    |
@@ -2807,6 +3438,11 @@ This directory can have new directories created inside of it using
 mkdir, and removing directories with rmdir. The directory created
 with mkdir in this directory will already contain files and other
 directories after it is created.
+在debugfs中，跟踪目录是一个名为“instances”的目录。
+该目录可以使用其中创建的新目录
+mkdir，并使用rmdir删除目录。 创建的目录
+在此目录中使用mkdir已经包含文件和其他
+创建后的目录。
 
  # mkdir instances/foo
  # ls instances/foo
@@ -2818,6 +3454,10 @@ As you can see, the new directory looks similar to the tracing directory
 itself. In fact, it is very similar, except that the buffer and
 events are agnostic from the main director, or from any other
 instances that are created.
+如您所见，新目录看起来与跟踪目录类似
+本身。 实际上，它非常相似，除了缓冲区和
+事件与主要董事或任何其他事件无关
+创建的实例。
 
 The files in the new directory work just like the files with the
 same name in the tracing directory except the buffer that is used
@@ -2826,10 +3466,20 @@ affect the main buffer with the exception of trace_options. Currently,
 the trace_options affect all instances and the top level buffer
 the same, but this may change in future releases. That is, options
 may become specific to the instance they reside in.
+新目录中的文件就像使用的文件一样
+跟踪目录中的名称除了使用的缓冲区之外
+是一个独立的新缓冲区。 这些文件会影响该缓冲区，但不会
+影响主缓冲区，但trace_options除外。 目前，
+trace_options影响所有实例和顶级缓冲区
+同样，但这可能会在未来的版本中发生变化。 那就是选项
+可能会变得特定于他们所在的实例。
 
 Notice that none of the function tracer files are there, nor is
 current_tracer and available_tracers. This is because the buffers
 can currently only have events enabled for them.
+请注意，没有任何函数跟踪器文件存在，也没有
+current_tracer和available_tracers。 这是因为缓冲区
+目前只能为他们启用事件。
 
  # mkdir instances/foo
  # mkdir instances/bar
@@ -2913,6 +3563,9 @@ CPU:2 [LOST 11745 EVENTS]
 You can see that the trace of the top most trace buffer shows only
 the function tracing. The foo instance displays wakeups and task
 switches.
+您可以看到最顶层跟踪缓冲区的跟踪仅显示
+功能追踪。 foo实例显示唤醒和任务
+开关。
 
 To remove the instances, simply delete their directories:
 
@@ -2922,6 +3575,8 @@ To remove the instances, simply delete their directories:
 
 Note, if a process has a trace file open in one of the instance
 directories, the rmdir will fail with EBUSY.
+请注意，如果进程在其中一个实例中打开了跟踪文件
+目录，rmdir将以EBUSY失败。
 
 
 Stack trace
@@ -2931,21 +3586,36 @@ waste it in functions. A kernel developer must be conscience of
 what they allocate on the stack. If they add too much, the system
 can be in danger of a stack overflow, and corruption will occur,
 usually leading to a system panic.
+由于内核具有固定大小的堆栈，因此重要的是不要
+浪费在功能上。 内核开发人员必须有良知
+他们在堆栈上分配的内容。 如果他们添加太多，系统
+可能存在堆栈溢出的危险，并且会发生损坏，
+通常导致系统恐慌。
 
 There are some tools that check this, usually with interrupts
 periodically checking usage. But if you can perform a check
 at every function call that will become very useful. As ftrace provides
 a function tracer, it makes it convenient to check the stack size
 at every function call. This is enabled via the stack tracer.
+有一些工具可以检查这一点，通常是中断
+定期检查使用情况 但是如果你能进行检查
+在每个函数调用将变得非常有用。 正如ftrace所提供的那样
+一个函数跟踪器，它可以方便地检查堆栈大小
+在每个函数调用。 这是通过堆栈跟踪器启用的。
 
 CONFIG_STACK_TRACER enables the ftrace stack tracing functionality.
 To enable it, write a '1' into /proc/sys/kernel/stack_tracer_enabled.
+CONFIG_STACK_TRACER启用ftrace堆栈跟踪功能。
+要启用它，请在/ proc / sys / kernel / stack_tracer_enabled中写入'1'。
 
  # echo 1 > /proc/sys/kernel/stack_tracer_enabled
 
 You can also enable it from the kernel command line to trace
 the stack size of the kernel during boot up, by adding "stacktrace"
 to the kernel command line parameter.
+您也可以从内核命令行启用它来跟踪
+启动时内核的堆栈大小，通过添加“stacktrace”
+到内核命令行参数。
 
 After running it for a few minutes, the output looks like:
 
@@ -2977,6 +3647,9 @@ After running it for a few minutes, the output looks like:
 Note, if -mfentry is being used by gcc, functions get traced before
 they set up the stack frame. This means that leaf level functions
 are not tested by the stack tracer when -mfentry is used.
+注意，如果gcc正在使用-mfentry，则之前会跟踪函数
+他们设置了堆栈框架。 这意味着叶级功能
+使用-mfentry时，堆栈跟踪器不会对其进行测试。
 
 Currently, -mfentry is used by gcc 4.6.0 and above on x86 only.
 
