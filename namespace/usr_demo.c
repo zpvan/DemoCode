@@ -63,13 +63,13 @@ void get_map(char* file)
     fclose(fd);
 }
 
-void get_uid_map(container_pid) {
+void get_uid_map(pid_t pid) {
     char file[256];
     sprintf(file, "/proc/%d/uid_map", pid);
     get_map(file);    
 }
 
-void get_gid_map(container_pid) {
+void get_gid_map(pid_t pid) {
     char file[256];
     sprintf(file, "/proc/%d/gid_map", pid);
     get_map(file);    
