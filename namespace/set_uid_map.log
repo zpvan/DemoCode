@@ -1,0 +1,36 @@
+# tracer: function_graph
+#
+# CPU  DURATION                  FUNCTION CALLS
+# |     |   |                     |   |   |   |
+  0)               |  proc_uid_map_write() {
+  0)               |    map_write() {
+  0)               |      mutex_lock() {
+  0)               |        _cond_resched() {
+  0)   0.113 us    |          rcu_all_qs();
+  0)   0.990 us    |        }
+  0)   1.654 us    |      }
+  0)               |      file_ns_capable() {
+  0)               |        security_capable() {
+  0)   0.081 us    |          cap_capable();
+  0)   0.123 us    |          apparmor_capable();
+  0)   1.408 us    |        }
+  0)   1.992 us    |      }
+  0)               |      memdup_user_nul() {
+  0)               |        __kmalloc_track_caller() {
+  0)   0.216 us    |          kmalloc_slab();
+  0)               |          _cond_resched() {
+  0)   0.073 us    |            rcu_all_qs();
+  0)   0.614 us    |          }
+  0)   2.426 us    |        }
+  0)               |        __check_object_size() {
+  0)   0.137 us    |          __virt_addr_valid();
+  0)   0.082 us    |          __check_heap_object();
+  0)   0.072 us    |          check_stack_object();
+  0)   2.031 us    |        }
+  0)   5.712 us    |      }
+  0)   0.117 us    |      map_id_range_down();
+  0)   0.071 us    |      map_id_range_down();
+  0)   0.071 us    |      mutex_unlock();
+  0)   0.079 us    |      kfree();
+  0) + 14.861 us   |    }
+  0) + 15.667 us   |  }
