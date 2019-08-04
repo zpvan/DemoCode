@@ -59,7 +59,7 @@ void get_map(char* file)
     }
     char content[256] = {0};
     fread(content, 1, 255, fd);
-    printf("%s => %s", file, content);
+    printf("%s => %s\n", file, content);
     fclose(fd);
 }
 
