@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <string.h>
 
+#define TEST
+
 // 定义一个给clone用的栈, 栈大小为1M
 #define STACK_SIZE (1024*1024)
 static char container_stack[STACK_SIZE];
@@ -58,12 +60,12 @@ int container_main()
     read(pipefd[0], &ch, 1);
 
     // set hostname
-    printf("Container [%ld] - setup hostname!\n", (long)getpid());
-    sethostname("container", 10); // 设置hostname
+    // printf("Container [%ld] - setup hostname!\n", (long)getpid());
+    // sethostname("container", 10); // 设置hostname
 
     // remount "/proc" to make sure the "top" and "ps" show container's information
     // system("mount -t proc proc /proc");
-    mount("proc", "/proc", "proc", 0, NULL);
+    // mount("proc", "/proc", "proc", 0, NULL);
 
     // 直接执行一个shell, 以便我们观察这个进程空间里的资源是否被隔离
     execv(container_args[0], container_args);
@@ -81,7 +83,15 @@ int main(int argc, char *argv[])
     printf("Parent - start a container!\n");
     // 调用clone函数, 其中传入一个函数, 还有一个栈空间的地址(为什么传尾指针, 因为栈是反着的)
     int container_pid = clone(container_main, container_stack+STACK_SIZE, 
-        CLONE_NEWUTS | CLONE_NEWIPC | CLONE_NEWPID | CLONE_NEWNS | CLONE_NEWUSER | SIGCHLD, NULL);
+     //   CLONE_NEWUTS |
+     //   CLONE_NEWIPC |
+     //   CLONE_NEWPID |
+     //   CLONE_NEWNS |
+        CLONE_NEWUSER |
+        SIGCHLD, NULL);
+
+    get_uid_map(container_pid);
+    get_gid_map(container_pid);
 
     printf("Parent pid = %ld, Child pid = %d\n", (long)getpid(), container_pid);
 
@@ -94,6 +104,9 @@ int main(int argc, char *argv[])
     set_gid_map(container_pid, 0, gid, 1);
 
     printf("Parent [%ld] - user/group mapping done!\n", (long)getpid());
+
+    get_uid_map(container_pid);
+    get_gid_map(container_pid);
 
     // 通知子进程
     close(pipefd[1]);
