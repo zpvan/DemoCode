@@ -21,6 +21,8 @@ char* const container_args[] = {
     NULL
 };
 
+static void sig_usr(int);
+
 int pipefd[2];
 
 void set_map(char* file, int inside_id, int outside_id, int len)
@@ -120,6 +122,12 @@ int main(int argc, char *argv[])
 
     printf("Parent pid = %ld, Child pid = %d\n", (long)getpid(), container_pid);
 
+    if (signal(SIGUSR1, sig_usr) == SIG_ERR)
+        printf("can't catch SIGUSR1\n");
+    pause();
+
+    printf("Parent pid = %ld, Child pid = %d, resume\n", (long)getpid(), container_pid);
+
     // To map the uid/gid, we need edit the /proc/PID/uid_map (or gid_map) in parent
     // The file format is, ID-inside-ns ID-outside-ns length
     // If no mapping, 
@@ -140,4 +148,11 @@ int main(int argc, char *argv[])
     waitpid(container_pid, NULL, 0);
     printf("Parent - stop a container!\n");
     return 0;
+}
+
+static void sig_usr(int signo)
+{
+    printf("sig_usr pid = %ld\n", (long)getpid());
+    if (signo == SIGUSR1)
+        printf("received SIGUSER1\n");
 }
