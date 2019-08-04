@@ -27,7 +27,7 @@ void set_map(char* file, int inside_id, int outside_id, int len)
 {
     FILE* fd = fopen(file, "w");
     if (!fd) {
-	printf("open file(%s) failed!\n", file);
+	    printf("open file(%s) failed!\n", file);
         return;
     }
     fprintf(fd, "%d %d %d", inside_id, outside_id, len);
@@ -46,6 +46,31 @@ void set_gid_map(pid_t pid, int inside_id, int outside_id, int len)
     char file[256];
     sprintf(file, "/proc/%d/gid_map", pid);
     set_map(file, inside_id, outside_id, len);
+}
+
+void get_map(char* file)
+{
+    FILE* fd = fopen(file, "r");
+    if (!fd) {
+	    printf("open file(%s) failed!\n", file);
+        return;
+    }
+    char content[256] = {0};
+    fread(content, 1, 255, fd);
+    printf("%s => %s", file, content);
+    fclose(fd);
+}
+
+void get_uid_map(container_pid) {
+    char file[256];
+    sprintf(file, "/proc/%d/uid_map", pid);
+    get_map(file);    
+}
+
+void get_gid_map(container_pid) {
+    char file[256];
+    sprintf(file, "/proc/%d/gid_map", pid);
+    get_map(file);    
 }
 
 int container_main()
