@@ -1,0 +1,50 @@
+# tracer: function_graph
+#
+# CPU  DURATION                  FUNCTION CALLS
+# |     |   |                     |   |   |   |
+  0)               |  proc_gid_map_write() {
+  0)               |    map_write() {
+  0)               |      mutex_lock() {
+  0)               |        _cond_resched() {
+  0)   0.108 us    |          rcu_all_qs();
+  0)   1.088 us    |        }
+  0)   1.651 us    |      }
+  0)               |      file_ns_capable() {
+  0)               |        security_capable() {
+  0)   0.104 us    |          cap_capable();
+  0)   0.127 us    |          apparmor_capable();
+  0)   1.475 us    |        }
+  0)   2.113 us    |      }
+  0)               |      memdup_user_nul() {
+  0)               |        __kmalloc_track_caller() {
+  0)   0.071 us    |          kmalloc_slab();
+  0)               |          _cond_resched() {
+  0)   0.071 us    |            rcu_all_qs();
+  0)   0.588 us    |          }
+  0)   1.726 us    |        }
+  0)               |        __check_object_size() {
+  0)   0.119 us    |          __virt_addr_valid();
+  0)   0.080 us    |          __check_heap_object();
+  0)   0.067 us    |          check_stack_object();
+  0)   1.821 us    |        }
+  0)   4.680 us    |      }
+  0)   0.076 us    |      map_id_range_down();
+  0)               |      ns_capable() {
+  0)               |        ns_capable_common() {
+  0)               |          security_capable() {
+  0)   0.094 us    |            cap_capable();
+  0)   0.085 us    |            apparmor_capable();
+  0)   1.260 us    |          }
+  0)   1.824 us    |        }
+  0)   2.360 us    |      }
+  0)               |      file_ns_capable() {
+  0)               |        security_capable() {
+  0)   0.067 us    |          cap_capable();
+  0)   0.082 us    |          apparmor_capable();
+  0)   1.196 us    |        }
+  0)   1.720 us    |      }
+  0)   0.077 us    |      map_id_range_down();
+  0)   0.072 us    |      mutex_unlock();
+  0)   0.088 us    |      kfree();
+  0) + 17.708 us   |    }
+  0) + 18.505 us   |  }
