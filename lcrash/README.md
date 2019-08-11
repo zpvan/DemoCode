@@ -35,8 +35,6 @@ red Hat提供的diskdump包，LKCD内核补丁，mcore
 ​    链接列表等。此外，可以输入任何gdb命令，
 ​    然后将其传递到gdb模块以供执行。
 
-
-
   o  There are several commands that delve deeper into specific kernel
      subsystems, which also serve as templates for kernel developers
      to create new commands for analysis of a specific area of interest.
@@ -49,8 +47,6 @@ red Hat提供的diskdump包，LKCD内核补丁，mcore
 ​    添加新命令是一件简单的事情，并且可以快速重新编译
 ​    将其添加到命令菜单中。
 
-
-
   o  The intent is to make the tool independent of Linux version dependencies,
      building in recognition of major kernel code changes so as to adapt to 
      new kernel versions, while maintaining backwards compatibility.
@@ -58,8 +54,6 @@ red Hat提供的diskdump包，LKCD内核补丁，mcore
 ​    目的是使该工具独立于Linux版本依赖项，
 ​    构建以识别主要内核代码的变化以适应
 ​    新的内核版本，同时保持向后兼容性。
-
-  
 
 A whitepaper with complete documentation concerning the use of this utility
 can be found here:
@@ -84,8 +78,6 @@ can be found here:
 ​    版本可以追溯到2.2.5-15。 主要设计目标是始终
 ​    保持向后兼容性。
 
-
-
   o  In order to contain debugging data, the top-level kernel Makefile's CFLAGS
      definition must contain the -g flag.  Typically distributions will contain
      a package containing a vmlinux file with full debuginfo data.  If not, the
@@ -95,8 +87,6 @@ can be found here:
 ​    definition必须包含-g标志。 通常，分发包含
 ​    包含带有完整debuginfo数据的vmlinux文件的包。 如果没有，那就是
 ​    内核必须重建：
-
-
 
      For 2.2 kernels that are not built with -g, change the following line:
     
@@ -492,4 +482,3 @@ can be found here:
   动态链接的命令将自动显示在崩溃中
   帮助菜单。 有关详细信息，请在运行时输入“help extend”，或输入
   shell命令行中的“crash -h extend”。
-
