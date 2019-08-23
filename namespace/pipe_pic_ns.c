@@ -4,13 +4,15 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/mount.h>
-#include <sys/capability.h>
+// #include <sys/capability.h>
 #include <stdio.h>
 #include <sched.h>
 #include <signal.h>
 #include <unistd.h>
 
 #define STACK_SIZE (1024 * 1024)
+
+#define READLINK_MAX 1024
 
 static char container_stack[STACK_SIZE];
 char* const container_args[] = {
@@ -53,6 +55,11 @@ int container_main(void* arg)
     /* 等待父进程通知后再往下执行（进程间的同步） */
     char ch;
     close(pipefd[1]);
+
+    char buf[READLINK_MAX] = {0};
+    int rslt = readlink("/proc/self/ns/ipc", buf, READLINK_MAX);
+    if (rslt > 0) printf("Container [%5d] - readlink %s\n", getpid(), buf);
+
     printf("Container [%5d] - wait read!\n", getpid());
     read(pipefd[0], &ch, 1);
     printf("Container [%5d] - read_pipe done!\n", getpid());
@@ -79,9 +86,17 @@ int main()
     pipe(pipefd);
  
     printf("Parent [%5d] - start a container!\n", getpid());
+    char buf[READLINK_MAX] = {0};
+    int rslt = readlink("/proc/self/ns/ipc", buf, READLINK_MAX);
+    if (rslt > 0) printf("Parent [%5d] - readlink %s\n", getpid(), buf);
 
     int container_pid = clone(container_main, container_stack+STACK_SIZE, 
-            CLONE_NEWUTS | CLONE_NEWPID | CLONE_NEWNS | CLONE_NEWUSER | CLONE_NEWIPC | SIGCHLD, NULL);
+            CLONE_NEWUTS | 
+	    // CLONE_NEWPID | 
+	    CLONE_NEWNS | 
+	    CLONE_NEWUSER | 
+	    CLONE_NEWIPC | 
+	    SIGCHLD, NULL);
 
     
     printf("Parent [%5d] - Container [%5d]!\n", getpid(), container_pid);
