@@ -182,4 +182,23 @@ key        semid      owner      perms      nsems
 
 
 
-pipe这种是无法隔离的
+pipe是无法隔离的
+
+
+
+```sh
+parallels@parallels-Parallels-Virtual-Platform:~/Desktop/DemoCode/namespace$ ./pipe_pic_ns.out &
+[1] 32713
+Parent [32713] - start a container!
+parallels@parallels-Parallels-Virtual-Platform:~/Desktop/DemoCode/namespace$ Parent [32713] - readlink ipc:[4026531839]
+Parent [32713] - Container [32714]!
+Parent [32713] - sleep and close write_pipe
+Container [32714] - inside the container!
+Container [32714] - readlink ipc:[4026532267]
+Container [32714] - wait read!
+Parent [32713] - close write_pipe done!
+Container [32714] - read_pipe done!
+Parent - container stopped!
+
+[1]+  Done                    ./pipe_pic_ns.out
+```
