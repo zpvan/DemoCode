@@ -1,0 +1,14 @@
+prefix=./../ffmpeg-hi3531d
+exec_prefix=${prefix}
+libdir=./../ffmpeg-hi3531d/lib
+includedir=./../ffmpeg-hi3531d/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 55.78.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil 
+Libs.private: -lm
+Cflags: -I${includedir}

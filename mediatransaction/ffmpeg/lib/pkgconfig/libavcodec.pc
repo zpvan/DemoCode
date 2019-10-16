@@ -1,0 +1,14 @@
+prefix=./../ffmpeg-hisi-3531d
+exec_prefix=${prefix}
+libdir=./../ffmpeg-hisi-3531d/lib
+includedir=./../ffmpeg-hisi-3531d/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 57.107.100
+Requires: 
+Requires.private: libswresample >= 2.9.100, libavutil >= 55.78.100
+Conflicts:
+Libs: -L${libdir}  -lavcodec 
+Libs.private: -lm -ldl -pthread -pthread
+Cflags: -I${includedir}

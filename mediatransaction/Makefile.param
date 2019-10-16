@@ -1,0 +1,162 @@
+# Makefile.param 
+# Only global variable should be defined here.
+# All the variables must be used as "export" and "?=".
+# Otherwise, there will be some errors, when Makefile.param is nested.
+
+# Use this file as the following sample
+# ifeq ($(PARAM_FILE), )
+#     PARAM_FILE:=../Makefile.param
+#     include $(PARAM_FILE)
+# endif
+
+# Define the default OS link directory.
+export ARCH=arm
+
+#defien chip 3531 or 3520d
+export HICHIP?=3531DV100
+export DEVTYPE?=FSC600
+export CPU_TYPE?=master
+
+ifeq ($(HICHIP),3520D)
+export CPU_TYPE=single
+endif
+
+ifeq ($(HICHIP),3531A)
+export CPU_TYPE=single
+endif
+
+ifeq ($(HICHIP),3531DV100)
+export CPU_TYPE=master
+export DEVTYPE=FSC600
+endif
+
+# use libc to choose cross compiler.
+export LIBC=glibc
+
+# Whether open -g 
+#export GDB?=y
+export GDB?=n
+
+ifeq ($(LIBC), )
+$(error LIBC not defined! Please check!)
+endif
+
+# Get the local SDK_ROOT path or RELEASE_ROOT path by PARAM_FILE.
+# PARAM_FILE is configed at Makefile before include this file
+export PARAM_FILE
+#ifeq ($(HICHIP),3536)
+#export SDK_ROOT ?= $(shell pwd)/3536
+export SDK_ROOT ?= $(shell cd `dirname $(PARAM_FILE)`; pwd)/$(HICHIP)
+#endif
+
+
+#export LINUX_ROOT ?= $(SDK_ROOT)/osdrv/kernel/linux-3.0.y
+export SDK_PATCH_ROOT ?= $(SDK_ROOT)/sdk_patch
+export TFTP_BOOT ?= "/tftpboot/$(shell whoami)"
+
+export PREFIX_DIR = $(SDK_ROOT)/prefix
+export IMAGES_DIR = $(SDK_ROOT)/images
+export VERSION_TAG = $(SDK_ROOT)/version_tag
+export VERSION = $(shell cat $(VERSION_TAG))
+export BUILD_DATE = $(shell date -uR)
+
+# Define cross compiler
+ifeq ($(LIBC),glibc)
+ifeq ($(HICHIP),3531DV100)
+export CROSS_COMPILE ?= arm-hisiv600-linux-
+export CROSS ?= arm-hisiv600-linux-
+export OSDRV_CROSS ?= arm-hisiv600-linux
+else
+export CROSS_COMPILE ?= arm-hisiv400-linux-
+export CROSS ?= arm-hisiv400-linux-
+export OSDRV_CROSS ?= arm-hisiv400-linux
+endif
+else
+ifeq ($(HICHIP),3531DV100)
+export CROSS_COMPILE ?= arm-hisiv500-linux-
+export CROSS ?= arm-hisiv500-linux-
+export OSDRV_CROSS ?= arm-hisiv500-linux
+else
+export CROSS_COMPILE ?= arm-hisiv300-linux-
+export CROSS ?= arm-hisiv300-linux-
+export OSDRV_CROSS ?= arm-hisiv300-linux-
+endif
+endif
+
+export CC := $(CROSS)gcc
+export CXX := $(CROSS)g++
+export AR := $(CROSS)ar
+export RANLIB := $(CROSS)ranlib
+export LD := $(CROSS)ld
+export STRIP = $(CROSS_COMPILE)strip
+export OBJCOPY = $(CROSS_COMPILE)objcopy
+
+
+ifeq ($(HICHIP),3536)
+    ifeq ($(CROSS),)
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include
+    else
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include -march=armv7-a -mfloat-abi=softfp -mfpu=neon-vfpv4 -mno-unaligned-access -fno-aggressive-loop-optimizations
+    endif
+endif
+
+ifeq ($(HICHIP),3520D)
+    ifeq ($(CROSS),)
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include
+    else
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include -mcpu=cortex-a7 -mfloat-abi=softfp -mfpu=neon-vfpv4 -mno-unaligned-access -fno-aggressive-loop-optimizations
+    endif
+endif
+
+ifeq ($(HICHIP),3531A)
+    ifeq ($(CROSS),)
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include
+    else
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include -mcpu=cortex-a9 -mfloat-abi=softfp -mfpu=neon -mno-unaligned-access -fno-aggressive-loop-optimizations
+    endif
+endif
+
+ifeq ($(HICHIP),3531DV100)
+    ifeq ($(CROSS),)
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include
+    else
+    export CFLAGS := -Wall -fPIC -Wno-psabi -I$(PREFIX_DIR)/include -mcpu=cortex-a9 -mfloat-abi=softfp -mfpu=neon -mno-unaligned-access -fno-aggressive-loop-optimizations -ffunction-sections
+    endif
+endif
+
+# because -O2 may cause output video not smooth, when one of the stream is timeout in ipm2000
+ifeq ($(GDB), y)
+	ifeq ($(HICHIP),3536)
+		export CFLAGS += -g -ggdb -g3 -DHI3536
+	endif
+	ifeq ($(HICHIP),3520D)
+		export CFLAGS += -g -ggdb -g3 -DHI3520D
+	endif
+	ifeq ($(HICHIP),3531A)
+		export CFLAGS += -g -ggdb -g3 -DHI3531A
+	endif
+	ifeq ($(HICHIP),3531DV100)
+		export CFLAGS += -g -ggdb -g3 -DHI3531DV100
+	endif
+else
+	ifeq ($(HICHIP),3536)
+		export CFLAGS += -O1 -DHI3536
+	endif
+	ifeq ($(HICHIP),3520D)
+		export CFLAGS += -O2 -DHI3520D
+	endif
+	ifeq ($(HICHIP),3531A)
+		export CFLAGS += -O2 -DHI3531A
+	endif
+	ifeq ($(HICHIP),3531DV100)
+		export CFLAGS += -O2 -DHI3531DV100
+	endif
+endif
+
+
+CFLAGS += -D_FILE_OFFSET_BITS=64 -D__hisi__
+
+export CXXFLAGS := $(CFLAGS)
+export CPPFLAGS := $(CFLAGS)
+
+# End!!

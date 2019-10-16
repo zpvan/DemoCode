@@ -1,0 +1,14 @@
+prefix=./../ffmpeg-hi3531d
+exec_prefix=${prefix}
+libdir=./../ffmpeg-hi3531d/lib
+includedir=./../ffmpeg-hi3531d/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 57.10.100
+Requires: 
+Requires.private: libavformat >= 57.83.100, libavcodec >= 57.107.100, libavutil >= 55.78.100
+Conflicts:
+Libs: -L${libdir}  -lavdevice 
+Libs.private: -lm -ldl -pthread -pthread
+Cflags: -I${includedir}
