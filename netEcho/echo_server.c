@@ -5,7 +5,7 @@
 
 int main() {
     char* echo_host = "192.168.1.20";
-    int echo_port = 777;
+    int echo_port = 7777;
     int sockfd;
     struct sockaddr_in *server = (struct sockaddr_in*)malloc(sizeof(struct sockaddr_in));
 
